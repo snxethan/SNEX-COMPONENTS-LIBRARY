@@ -1,148 +1,14 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/index.ts
-var index_exports = {};
-__export(index_exports, {
-  ContactFormModal: () => ContactFormModal,
-  ExternalLinkHandler: () => ExternalLinkHandler,
-  Footer: () => Footer_default,
-  PDFModalViewer: () => PDFModalViewer_default,
-  SecurityPolicyModal: () => SecurityPolicyModal,
-  TooltipWrapper: () => ToolTipWrapper_default,
-  useExternalLink: () => useExternalLink
-});
-module.exports = __toCommonJS(index_exports);
-
-// src/Footer.tsx
-var import_react4 = require("react");
-
-// src/ToolTipWrapper.tsx
-var import_react = require("react");
-var import_lucide_react = require("lucide-react");
-var import_jsx_runtime = require("react/jsx-runtime");
-var TooltipWrapper = ({ label, children, url, fullWidth = false }) => {
-  const [visible, setVisible] = (0, import_react.useState)(false);
-  const [thumbnailLoading, setThumbnailLoading] = (0, import_react.useState)(false);
-  const [thumbnailError, setThumbnailError] = (0, import_react.useState)(false);
-  const timeoutRef = (0, import_react.useRef)(null);
-  const isHovering = (0, import_react.useRef)(false);
-  const isPdf = (0, import_react.useMemo)(() => {
-    var _a;
-    return (_a = url == null ? void 0 : url.toLowerCase().endsWith(".pdf")) != null ? _a : false;
-  }, [url]);
-  const handleMouseEnter = (0, import_react.useCallback)(() => {
-    isHovering.current = true;
-    timeoutRef.current = setTimeout(() => {
-      if (isHovering.current) {
-        setVisible(true);
-        if (isPdf) {
-          setThumbnailLoading(true);
-          setThumbnailError(false);
-        }
-      }
-    }, 500);
-  }, [isPdf]);
-  const handleMouseLeave = (0, import_react.useCallback)(() => {
-    isHovering.current = false;
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setVisible(false);
-    setThumbnailLoading(false);
-  }, []);
-  const handleThumbnailLoad = () => setThumbnailLoading(false);
-  const handleThumbnailError = () => {
-    setThumbnailLoading(false);
-    setThumbnailError(true);
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-    "div",
-    {
-      className: `relative group ${fullWidth ? "w-full" : "inline-block"}`,
-      onMouseEnter: handleMouseEnter,
-      onMouseLeave: handleMouseLeave,
-      children: [
-        children,
-        visible && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: isPdf ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "div",
-          {
-            role: "tooltip",
-            "aria-label": label,
-            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#1a1a1a] border border-[#333] rounded-md shadow-xl z-[70] p-2 w-[220px] max-w-[90vw] transition-all duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
-            children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col items-center", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "text-xs text-white mb-1 font-medium", children: label }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "relative w-full h-[260px] bg-[#111] rounded overflow-hidden", children: [
-                thumbnailLoading && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 flex items-center justify-center bg-[#111]", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_lucide_react.Loader2, { className: "h-6 w-6 animate-spin text-white/70" }) }),
-                thumbnailError ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 flex items-center justify-center text-white/70 text-xs p-2 text-center", children: "Unable to generate preview" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                  "embed",
-                  {
-                    src: url,
-                    type: "application/pdf",
-                    className: "w-full h-full min-h-[260px]",
-                    onLoad: handleThumbnailLoad,
-                    onError: handleThumbnailError
-                  }
-                ),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between text-xs text-white", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "truncate max-w-[140px]", children: "PDF Document" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-white/70", children: "Preview" })
-                ] }) })
-              ] })
-            ] })
-          }
-        ) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "div",
-          {
-            role: "tooltip",
-            "aria-label": label,
-            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-red-600 text-white rounded-md shadow-md z-[70] whitespace-nowrap transition-all duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
-            children: label
-          }
-        ) })
-      ]
-    }
-  );
-};
-var ToolTipWrapper_default = TooltipWrapper;
-
-// src/SecurityPolicyModal.tsx
-var import_react3 = require("react");
-
-// src/ContactFormModal.tsx
-var import_react2 = require("react");
-var import_react_dom = require("react-dom");
-var import_react_hot_toast = __toESM(require("react-hot-toast"));
-var import_jsx_runtime2 = require("react/jsx-runtime");
+// src/components/ContactFormModal.tsx
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import toast from "react-hot-toast";
+import { jsx, jsxs } from "react/jsx-runtime";
 function ContactFormModal({ onClose }) {
-  const [isAnimatingOut, setIsAnimatingOut] = (0, import_react2.useState)(false);
-  const [name, setName] = (0, import_react2.useState)("");
-  const [email, setEmail] = (0, import_react2.useState)("");
-  const [message, setMessage] = (0, import_react2.useState)("");
-  const [mounted, setMounted] = (0, import_react2.useState)(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [mounted, setMounted] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -154,17 +20,17 @@ function ContactFormModal({ onClose }) {
       });
       const data = await response.json().catch(() => ({}));
       if (response.ok) {
-        import_react_hot_toast.default.success("Message sent successfully!");
+        toast.success("Message sent successfully!");
         onClose();
       } else {
-        import_react_hot_toast.default.error(data.message || "Something went wrong.");
+        toast.error(data.message || "Something went wrong.");
       }
     } catch (err) {
       console.error(err);
-      import_react_hot_toast.default.error("Network error. Please try again later.");
+      toast.error("Network error. Please try again later.");
     }
   };
-  (0, import_react2.useEffect)(() => {
+  useEffect(() => {
     setMounted(true);
     document.body.classList.add("overflow-hidden");
     return () => document.body.classList.remove("overflow-hidden");
@@ -173,18 +39,18 @@ function ContactFormModal({ onClose }) {
     setIsAnimatingOut(true);
     setTimeout(onClose, 300);
   };
-  const modalContent = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+  const modalContent = /* @__PURE__ */ jsx(
     "div",
     {
       className: "fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm",
       onClick: close,
-      children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+      children: /* @__PURE__ */ jsxs(
         "div",
         {
           className: `bg-[#1e1e1e] text-white border border-[#333] rounded-xl p-6 max-w-md w-full relative ${isAnimatingOut ? "animate-elastic-out" : "animate-elastic-in"}`,
           onClick: (e) => e.stopPropagation(),
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            /* @__PURE__ */ jsx(
               "button",
               {
                 onClick: close,
@@ -192,10 +58,10 @@ function ContactFormModal({ onClose }) {
                 children: "\xD7 "
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { className: "text-xl font-semibold mb-4", children: "Contact Me" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
+            /* @__PURE__ */ jsx("h3", { className: "text-xl font-semibold mb-4", children: "Contact Me" }),
+            /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
               " ",
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+              /* @__PURE__ */ jsx(
                 "input",
                 {
                   type: "text",
@@ -206,7 +72,7 @@ function ContactFormModal({ onClose }) {
                   onChange: (e) => setName(e.target.value)
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+              /* @__PURE__ */ jsx(
                 "input",
                 {
                   type: "email",
@@ -217,7 +83,7 @@ function ContactFormModal({ onClose }) {
                   onChange: (e) => setEmail(e.target.value)
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+              /* @__PURE__ */ jsx(
                 "textarea",
                 {
                   required: true,
@@ -227,7 +93,7 @@ function ContactFormModal({ onClose }) {
                   onChange: (e) => setMessage(e.target.value)
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+              /* @__PURE__ */ jsx(
                 "button",
                 {
                   type: "submit",
@@ -242,315 +108,25 @@ function ContactFormModal({ onClose }) {
     }
   );
   if (!mounted) return null;
-  return (0, import_react_dom.createPortal)(modalContent, document.body);
+  return createPortal(modalContent, document.body);
 }
 
-// src/SecurityPolicyModal.tsx
-var import_fa = require("react-icons/fa");
-var import_jsx_runtime3 = require("react/jsx-runtime");
-function SecurityPolicyModal({ onClose }) {
-  const [showContact, setShowContact] = (0, import_react3.useState)(false);
-  const [isAnimatingOut, setIsAnimatingOut] = (0, import_react3.useState)(false);
-  (0, import_react3.useEffect)(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, []);
-  const handleClose = () => {
-    setIsAnimatingOut(true);
-    setTimeout(() => {
-      onClose();
-    }, 300);
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-    "div",
-    {
-      className: "fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-fade-in",
-      onClick: (e) => {
-        if (e.target === e.currentTarget) handleClose();
-      },
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
-          "div",
-          {
-            className: `bg-[#222222] rounded-xl border border-[#333333] shadow-lg p-8 relative max-w-4xl w-full max-h-[90vh] overflow-y-auto ${isAnimatingOut ? "animate-elastic-out" : "animate-elastic-in"}`,
-            onClick: (e) => e.stopPropagation(),
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-                "button",
-                {
-                  onClick: handleClose,
-                  className: "absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl transition-colors",
-                  "aria-label": "Close",
-                  children: "\xD7"
-                }
-              ),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("h1", { className: "text-3xl font-bold text-white mb-8 relative text-center", children: [
-                "Security Policy",
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "absolute bottom-[-8px] left-0 w-full h-1 bg-gradient-to-r from-red-600 to-red-500" })
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "space-y-8", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "flex items-center gap-3 mb-4", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_fa.FaShieldAlt, { className: "text-red-500 text-xl" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h2", { className: "text-xl font-semibold text-white", children: "Reporting Security Issues" })
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "text-gray-300", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "mb-4", children: "If you discover a security vulnerability or have concerns about the website's security, please get in touch immediately. All reports will be investigated promptly." }),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "flex justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-                      "button",
-                      {
-                        onClick: () => setShowContact(true),
-                        className: "inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-lg gap-2 transition-all duration-200 ease-out hover:scale-105 active:scale-95",
-                        children: "Contact Me"
-                      }
-                    ) })
-                  ] })
-                ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "flex items-center gap-3 mb-4", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_fa.FaUserShield, { className: "text-red-500 text-xl" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h2", { className: "text-xl font-semibold text-white", children: "Data Protection" })
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "text-gray-300 space-y-2", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "This website prioritizes your privacy and data protection:" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "No personal information is collected or stored" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "Analytics are anonymized for performance monitoring only" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "No tracking cookies are used without explicit consent" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "Data is transmitted securely using HTTPS" })
-                    ] })
-                  ] })
-                ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "flex items-center gap-3 mb-4", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_fa.FaLink, { className: "text-red-500 text-xl" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h2", { className: "text-xl font-semibold text-white", children: "External Links" })
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "text-gray-300 space-y-2", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "This website includes links to external websites and resources:" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "All external links are clearly marked" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "Users are notified before leaving the site" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "Third-party content is reviewed for safety" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "I am not responsible for external website content" })
-                    ] })
-                  ] })
-                ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "flex items-center gap-3 mb-4", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_fa.FaCookie, { className: "text-red-500 text-xl" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h2", { className: "text-xl font-semibold text-white", children: "Cookie Policy" })
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "text-gray-300 space-y-2", children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "This website uses cookies responsibly:" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "Essential cookies for basic functionality only" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "No tracking or analytics cookies without consent" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "Session cookies are removed when you close your browser" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { children: "You can disable cookies in your browser settings" })
-                    ] })
-                  ] })
-                ] })
-              ] })
-            ]
-          }
-        ),
-        showContact && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(ContactFormModal, { onClose: () => setShowContact(false) })
-      ]
-    }
-  );
-}
-
-// src/Footer.tsx
-var import_jsx_runtime4 = require("react/jsx-runtime");
-var Footer = () => {
-  const [showSecurityPolicy, setShowSecurityPolicy] = (0, import_react4.useState)(false);
-  const [loading, setLoading] = (0, import_react4.useState)(true);
-  (0, import_react4.useEffect)(() => {
-    setLoading(false);
-  }, []);
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("footer", { className: "footer", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "footer-container", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "footer-row", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "footer-left", children: !loading ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "View Security Policy", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-          "button",
-          {
-            onClick: () => setShowSecurityPolicy(true),
-            className: "footer-link-button",
-            children: "Security Policy"
-          }
-        ) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-sm" }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "footer-center", children: !loading ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-            "img",
-            {
-              src: "/images/avatar/snex.png",
-              alt: "Ethan Townsend",
-              width: 32,
-              height: 32,
-              className: "avatar"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("a", { href: "https://ethantownsend.dev", className: "footer-link-button name-link", children: [
-            "Ethan Townsend \xA9 ",
-            (/* @__PURE__ */ new Date()).getFullYear()
-          ] }) })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-circle" }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-md" })
-        ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "footer-right", children: !loading ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "footer-links", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Portfolio", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "domain-links", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://snex.dev", className: "footer-link-button", children: "snex.dev" }),
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://snxethan.dev", className: "footer-link-button", children: "snxethan.dev" })
-          ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "divider", children: "|" }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://ethantownsend.dev", className: "footer-link-button", children: "ethantownsend.dev" }) })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-sm" }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-md" })
-        ] }) })
-      ] }) }),
-      showSecurityPolicy && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(SecurityPolicyModal, { onClose: () => setShowSecurityPolicy(false) })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("style", { children: `
-        .footer {
-          background: #121212;
-          color: #9ca3af;
-          width: 100%;
-          padding: 1.5rem;
-        }
-        .footer-container {
-          max-width: 96rem; /* same as Tailwind's max-w-8xl */
-          margin: 0 auto;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-          align-items: center;
-        }
-        .footer-row {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          gap: 1rem; /* same as gap-4 */
-          text-align: center;
-          font-size: 0.875rem;
-          align-items: center;
-        }
-        @media (min-width: 1024px) {
-          .footer-row {
-            flex-direction: row;
-            justify-content: space-between;
-            text-align: left;
-          }
-        }
-        .footer-left,
-        .footer-right,
-        .footer-center {
-          display: flex;
-          align-items: center;
-        }
-
-        .footer-center {
-          gap: 0.5rem; /* gap-2 */
-        }
-        .footer-center a.name-link {
-          display: inline-flex;
-          align-items: center;
-          line-height: 1;
-        }
-
-        .footer-right {
-          flex-direction: column;
-          gap: 0.5rem; /* gap-2 */
-        }
-        @media (min-width: 640px) {
-          .footer-right {
-            flex-direction: row;
-          }
-        }
-        .footer-links {
-          display: flex;
-          flex-direction: row;
-          gap: 0.5rem; /* sm:flex-row gap-2 */
-          align-items: center;
-          justify-content: center;
-        }
-        .domain-links {
-          display: flex;
-          gap: 1rem; /* flex gap-4 */
-        }
-        .divider {
-          display: none;
-          color: #4b5563;
-        }
-        @media (min-width: 640px) {
-          .divider {
-            display: inline-block;
-          }
-        }
-
-        .footer-link-button {
-          font-size: 0.875rem;
-          color: #9ca3af;
-          background: none;
-          border: none;
-          cursor: pointer;
-          transition: color 0.2s ease;
-          text-decoration: none;
-        }
-        .footer-link-button:hover {
-          color: #dc2626;
-        }
-
-        .avatar {
-          border-radius: 50%;
-          display: inline-block;
-          width: 32px;
-          height: 32px;
-          object-fit: cover;
-        }
-
-        .skeleton {
-          background: #333;
-          border-radius: 0.25rem;
-          animation: pulse 1.5s ease-in-out infinite;
-        }
-        .skeleton-circle {
-          width: 2rem;
-          height: 2rem;
-          border-radius: 50%;
-        }
-        .skeleton-sm {
-          width: 6rem;
-          height: 1.25rem;
-        }
-        .skeleton-md {
-          width: 10rem;
-          height: 1.25rem;
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 0.6; }
-          50% { opacity: 1; }
-        }
-      ` })
-  ] });
-};
-var Footer_default = Footer;
-
-// src/ExternalLinkHandler.tsx
-var import_react5 = require("react");
-var import_jsx_runtime5 = require("react/jsx-runtime");
-var ExternalLinkContext = (0, import_react5.createContext)(
+// src/components/ExternalLinkHandler.tsx
+import {
+  createContext,
+  useContext,
+  useState as useState2,
+  useEffect as useEffect2
+} from "react";
+import { Fragment, jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+var ExternalLinkContext = createContext(
   void 0
 );
 var ExternalLinkHandler = ({ children }) => {
-  const [isVisible, setIsVisible] = (0, import_react5.useState)(false);
-  const [isAnimatingOut, setIsAnimatingOut] = (0, import_react5.useState)(false);
-  const [targetUrl, setTargetUrl] = (0, import_react5.useState)("");
-  const [isProfessional, setIsProfessional] = (0, import_react5.useState)(false);
+  const [isVisible, setIsVisible] = useState2(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState2(false);
+  const [targetUrl, setTargetUrl] = useState2("");
+  const [isProfessional, setIsProfessional] = useState2(false);
   const handleExternalClick = (url, isProfessional2 = false) => {
     setTargetUrl(url);
     setIsProfessional(isProfessional2);
@@ -565,7 +141,7 @@ var ExternalLinkHandler = ({ children }) => {
       setIsProfessional(false);
     }, 300);
   };
-  (0, import_react5.useEffect)(() => {
+  useEffect2(() => {
     if (isVisible) {
       document.body.classList.add("overflow-hidden");
     } else {
@@ -575,7 +151,7 @@ var ExternalLinkHandler = ({ children }) => {
       document.body.classList.remove("overflow-hidden");
     };
   }, [isVisible]);
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+  return /* @__PURE__ */ jsxs2(
     ExternalLinkContext.Provider,
     {
       value: {
@@ -587,18 +163,18 @@ var ExternalLinkHandler = ({ children }) => {
       },
       children: [
         children,
-        isVisible && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+        isVisible && /* @__PURE__ */ jsx2(
           "div",
           {
-            className: "fixed inset-0 z-[80] flex items-center justify-center backdrop-blur-sm bg-black/40 animate-fade-in p-4",
+            className: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40 animate-fade-in p-4",
             onClick: closeWarning,
-            children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+            children: /* @__PURE__ */ jsxs2(
               "div",
               {
                 className: `bg-[#1a1a1a] border border-[#333] rounded-xl p-6 max-w-md w-full text-center relative ${isAnimatingOut ? "animate-elastic-out" : "animate-elastic-in"}`,
                 onClick: (e) => e.stopPropagation(),
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                  /* @__PURE__ */ jsx2(
                     "button",
                     {
                       onClick: closeWarning,
@@ -607,28 +183,28 @@ var ExternalLinkHandler = ({ children }) => {
                       children: "\xD7"
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h3", { className: "text-xl font-semibold text-white mb-2", children: "External Link Notice" }),
-                  isProfessional ? /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("p", { className: "text-gray-300 text-sm mb-4", children: [
+                  /* @__PURE__ */ jsx2("h3", { className: "text-xl font-semibold text-white mb-2", children: "External Link Notice" }),
+                  isProfessional ? /* @__PURE__ */ jsxs2(Fragment, { children: [
+                    /* @__PURE__ */ jsxs2("p", { className: "text-gray-300 text-sm mb-4", children: [
                       "You are about to visit a ",
-                      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("b", { children: "professional platform" }),
+                      /* @__PURE__ */ jsx2("b", { children: "professional platform" }),
                       " or external resource."
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "text-gray-200 text-sm mb-4", children: "The content on this platform may not reflect my personal views and is owned by a third party." })
-                  ] }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("p", { className: "text-gray-300 text-sm mb-4", children: [
+                    /* @__PURE__ */ jsx2("p", { className: "text-gray-200 text-sm mb-4", children: "The content on this platform may not reflect my personal views and is owned by a third party." })
+                  ] }) : /* @__PURE__ */ jsxs2(Fragment, { children: [
+                    /* @__PURE__ */ jsxs2("p", { className: "text-gray-300 text-sm mb-4", children: [
                       "You are about to visit a ",
-                      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("b", { children: "social platform" }),
+                      /* @__PURE__ */ jsx2("b", { children: "social platform" }),
                       " or external resource."
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "text-gray-200 text-sm mb-4", children: "Please note that the content on this platform does not reflect my professional identity or represent me in any official capacity." })
+                    /* @__PURE__ */ jsx2("p", { className: "text-gray-200 text-sm mb-4", children: "Please note that the content on this platform does not reflect my professional identity or represent me in any official capacity." })
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("p", { className: "text-gray-100 text-sm mb-4", children: [
+                  /* @__PURE__ */ jsxs2("p", { className: "text-gray-100 text-sm mb-4", children: [
                     "Please proceed with ",
-                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("b", { children: "caution" }),
+                    /* @__PURE__ */ jsx2("b", { children: "caution" }),
                     "."
                   ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "flex justify-center gap-4", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                  /* @__PURE__ */ jsx2("div", { className: "flex justify-center gap-4", children: /* @__PURE__ */ jsx2(
                     "a",
                     {
                       href: targetUrl,
@@ -649,19 +225,19 @@ var ExternalLinkHandler = ({ children }) => {
   );
 };
 var useExternalLink = () => {
-  const context = (0, import_react5.useContext)(ExternalLinkContext);
+  const context = useContext(ExternalLinkContext);
   if (!context) {
     throw new Error("useExternalLink must be used within an ExternalLinkHandler");
   }
   return context;
 };
 
-// src/PDFModalViewer.tsx
-var import_react6 = require("react");
-var import_lucide_react2 = require("lucide-react");
-var import_fa2 = require("react-icons/fa");
-var import_react_dom2 = __toESM(require("react-dom"));
-var import_jsx_runtime6 = require("react/jsx-runtime");
+// src/components/PDFModalViewer.tsx
+import { useEffect as useEffect3, useState as useState3 } from "react";
+import { X, Loader2 } from "lucide-react";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import ReactDOM from "react-dom";
+import { Fragment as Fragment2, jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
 var isPdfSupported = () => {
   const ua = navigator.userAgent.toLowerCase();
   const isIOS = /iphone|ipad|ipod/.test(ua);
@@ -670,11 +246,11 @@ var isPdfSupported = () => {
   return !(isIOS || isSafari || isMobile);
 };
 var PDFModalViewer = ({ pdfUrl, onClose }) => {
-  const [isVisible, setIsVisible] = (0, import_react6.useState)(false);
-  const [isAnimatingOut, setIsAnimatingOut] = (0, import_react6.useState)(false);
-  const [isUnsupported, setIsUnsupported] = (0, import_react6.useState)(false);
-  const [isLoading, setIsLoading] = (0, import_react6.useState)(true);
-  (0, import_react6.useEffect)(() => {
+  const [isVisible, setIsVisible] = useState3(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState3(false);
+  const [isUnsupported, setIsUnsupported] = useState3(false);
+  const [isLoading, setIsLoading] = useState3(true);
+  useEffect3(() => {
     if (pdfUrl) {
       setIsVisible(true);
       setIsUnsupported(!isPdfSupported());
@@ -699,53 +275,53 @@ var PDFModalViewer = ({ pdfUrl, onClose }) => {
     }, 300);
   };
   if (!pdfUrl || !isVisible) return null;
-  return import_react_dom2.default.createPortal(
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+  return ReactDOM.createPortal(
+    /* @__PURE__ */ jsx3(
       "div",
       {
-        className: "fixed inset-0 z-[90] flex items-center justify-center bg-black/60 backdrop-blur-sm p-16",
+        className: "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-16",
         onClick: (e) => {
           if (e.target === e.currentTarget) initiateClose();
         },
-        children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+        children: /* @__PURE__ */ jsxs3(
           "div",
           {
             className: `relative bg-[#1a1a1a] border border-[#333] rounded-xl w-full max-w-4xl max-h-[90vh] shadow-xl overflow-hidden flex flex-col ${isAnimatingOut ? "animate-elastic-out" : "animate-elastic-in"}`,
             onClick: (e) => e.stopPropagation(),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "flex items-center justify-between p-3 sm:p-4 border-b border-[#333]", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+              /* @__PURE__ */ jsxs3("div", { className: "flex items-center justify-between p-3 sm:p-4 border-b border-[#333]", children: [
+                /* @__PURE__ */ jsxs3(
                   "button",
                   {
                     onClick: () => window.open(pdfUrl || "", "_blank"),
                     className: "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all",
                     "aria-label": "Download or open in new tab",
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_fa2.FaExternalLinkAlt, { size: 16 }),
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "hidden sm:inline", children: "Open in new tab" })
+                      /* @__PURE__ */ jsx3(FaExternalLinkAlt, { size: 16 }),
+                      /* @__PURE__ */ jsx3("span", { className: "hidden sm:inline", children: "Open in new tab" })
                     ]
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                /* @__PURE__ */ jsx3(
                   "button",
                   {
                     onClick: initiateClose,
                     "aria-label": "Close Preview",
                     className: "text-white hover:text-red-500 transition p-1 rounded-full",
-                    children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_lucide_react2.X, { size: 24 })
+                    children: /* @__PURE__ */ jsx3(X, { size: 24 })
                   }
                 )
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "flex-1 overflow-auto relative bg-[#1a1a1a]", children: isUnsupported ? /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "flex flex-col items-center justify-center h-full text-white text-sm p-6 text-center space-y-2", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { children: "PDF preview is not supported on this device or browser." }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { children: "Please open the PDF in a new tab or download it to view." })
-              ] }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [
-                isLoading && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "absolute inset-0 flex items-center justify-center bg-[#1a1a1a] z-10", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_lucide_react2.Loader2, { className: "h-8 w-8 animate-spin text-white" }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+              /* @__PURE__ */ jsx3("div", { className: "flex-1 overflow-auto relative bg-[#1a1a1a]", children: isUnsupported ? /* @__PURE__ */ jsxs3("div", { className: "flex flex-col items-center justify-center h-full text-white text-sm p-6 text-center space-y-2", children: [
+                /* @__PURE__ */ jsx3("p", { children: "PDF preview is not supported on this device or browser." }),
+                /* @__PURE__ */ jsx3("p", { children: "Please open the PDF in a new tab or download it to view." })
+              ] }) : /* @__PURE__ */ jsxs3(Fragment2, { children: [
+                isLoading && /* @__PURE__ */ jsx3("div", { className: "absolute inset-0 flex items-center justify-center bg-[#1a1a1a] z-10", children: /* @__PURE__ */ jsx3(Loader2, { className: "h-8 w-8 animate-spin text-white" }) }),
+                /* @__PURE__ */ jsx3(
                   "iframe",
                   {
                     src: pdfUrl,
-                    className: "w-full h-full min-h-[500px] border-none",
+                    className: "w-full min-h-[600px] h-[calc(100vh-150px)] max-h-[75vh] border-none",
                     onLoad: () => setIsLoading(false),
                     loading: "lazy"
                   }
@@ -760,13 +336,220 @@ var PDFModalViewer = ({ pdfUrl, onClose }) => {
   );
 };
 var PDFModalViewer_default = PDFModalViewer;
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
+
+// src/components/SecurityPolicyModal.tsx
+import { useState as useState4, useEffect as useEffect4 } from "react";
+import { FaShieldAlt, FaUserShield, FaLink, FaCookie } from "react-icons/fa";
+import { jsx as jsx4, jsxs as jsxs4 } from "react/jsx-runtime";
+function SecurityPolicyModal({ onClose }) {
+  const [showContact, setShowContact] = useState4(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState4(false);
+  useEffect4(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+  const handleClose = () => {
+    setIsAnimatingOut(true);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  };
+  return /* @__PURE__ */ jsxs4(
+    "div",
+    {
+      className: "fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in",
+      onClick: (e) => {
+        if (e.target === e.currentTarget) handleClose();
+      },
+      children: [
+        /* @__PURE__ */ jsxs4(
+          "div",
+          {
+            className: `bg-[#222222] rounded-xl border border-[#333333] shadow-lg p-8 relative max-w-4xl w-full max-h-[90vh] overflow-y-auto ${isAnimatingOut ? "animate-elastic-out" : "animate-elastic-in"}`,
+            onClick: (e) => e.stopPropagation(),
+            children: [
+              /* @__PURE__ */ jsx4(
+                "button",
+                {
+                  onClick: handleClose,
+                  className: "absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl transition-colors",
+                  "aria-label": "Close",
+                  children: "\xD7"
+                }
+              ),
+              /* @__PURE__ */ jsxs4("h1", { className: "text-3xl font-bold text-white mb-8 relative text-center", children: [
+                "Security Policy",
+                /* @__PURE__ */ jsx4("span", { className: "absolute bottom-[-8px] left-0 w-full h-1 bg-gradient-to-r from-red-600 to-red-500" })
+              ] }),
+              /* @__PURE__ */ jsxs4("div", { className: "space-y-8", children: [
+                /* @__PURE__ */ jsxs4("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [
+                  /* @__PURE__ */ jsxs4("div", { className: "flex items-center gap-3 mb-4", children: [
+                    /* @__PURE__ */ jsx4(FaShieldAlt, { className: "text-red-500 text-xl" }),
+                    /* @__PURE__ */ jsx4("h2", { className: "text-xl font-semibold text-white", children: "Reporting Security Issues" })
+                  ] }),
+                  /* @__PURE__ */ jsxs4("div", { className: "text-gray-300", children: [
+                    /* @__PURE__ */ jsx4("p", { className: "mb-4", children: "If you discover a security vulnerability or have concerns about the website's security, please get in touch immediately. All reports will be investigated promptly." }),
+                    /* @__PURE__ */ jsx4("div", { className: "flex justify-center", children: /* @__PURE__ */ jsx4(
+                      "button",
+                      {
+                        onClick: () => setShowContact(true),
+                        className: "inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-lg gap-2 transition-all duration-200 ease-out hover:scale-105 active:scale-95",
+                        children: "Contact Me"
+                      }
+                    ) })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxs4("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [
+                  /* @__PURE__ */ jsxs4("div", { className: "flex items-center gap-3 mb-4", children: [
+                    /* @__PURE__ */ jsx4(FaUserShield, { className: "text-red-500 text-xl" }),
+                    /* @__PURE__ */ jsx4("h2", { className: "text-xl font-semibold text-white", children: "Data Protection" })
+                  ] }),
+                  /* @__PURE__ */ jsxs4("div", { className: "text-gray-300 space-y-2", children: [
+                    /* @__PURE__ */ jsx4("p", { children: "This website prioritizes your privacy and data protection:" }),
+                    /* @__PURE__ */ jsxs4("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [
+                      /* @__PURE__ */ jsx4("li", { children: "No personal information is collected or stored" }),
+                      /* @__PURE__ */ jsx4("li", { children: "Analytics are anonymized for performance monitoring only" }),
+                      /* @__PURE__ */ jsx4("li", { children: "No tracking cookies are used without explicit consent" }),
+                      /* @__PURE__ */ jsx4("li", { children: "Data is transmitted securely using HTTPS" })
+                    ] })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxs4("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [
+                  /* @__PURE__ */ jsxs4("div", { className: "flex items-center gap-3 mb-4", children: [
+                    /* @__PURE__ */ jsx4(FaLink, { className: "text-red-500 text-xl" }),
+                    /* @__PURE__ */ jsx4("h2", { className: "text-xl font-semibold text-white", children: "External Links" })
+                  ] }),
+                  /* @__PURE__ */ jsxs4("div", { className: "text-gray-300 space-y-2", children: [
+                    /* @__PURE__ */ jsx4("p", { children: "This website includes links to external websites and resources:" }),
+                    /* @__PURE__ */ jsxs4("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [
+                      /* @__PURE__ */ jsx4("li", { children: "All external links are clearly marked" }),
+                      /* @__PURE__ */ jsx4("li", { children: "Users are notified before leaving the site" }),
+                      /* @__PURE__ */ jsx4("li", { children: "Third-party content is reviewed for safety" }),
+                      /* @__PURE__ */ jsx4("li", { children: "I am not responsible for external website content" })
+                    ] })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxs4("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [
+                  /* @__PURE__ */ jsxs4("div", { className: "flex items-center gap-3 mb-4", children: [
+                    /* @__PURE__ */ jsx4(FaCookie, { className: "text-red-500 text-xl" }),
+                    /* @__PURE__ */ jsx4("h2", { className: "text-xl font-semibold text-white", children: "Cookie Policy" })
+                  ] }),
+                  /* @__PURE__ */ jsxs4("div", { className: "text-gray-300 space-y-2", children: [
+                    /* @__PURE__ */ jsx4("p", { children: "This website uses cookies responsibly:" }),
+                    /* @__PURE__ */ jsxs4("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [
+                      /* @__PURE__ */ jsx4("li", { children: "Essential cookies for basic functionality only" }),
+                      /* @__PURE__ */ jsx4("li", { children: "No tracking or analytics cookies without consent" }),
+                      /* @__PURE__ */ jsx4("li", { children: "Session cookies are removed when you close your browser" }),
+                      /* @__PURE__ */ jsx4("li", { children: "You can disable cookies in your browser settings" })
+                    ] })
+                  ] })
+                ] })
+              ] })
+            ]
+          }
+        ),
+        showContact && /* @__PURE__ */ jsx4(ContactFormModal, { onClose: () => setShowContact(false) })
+      ]
+    }
+  );
+}
+
+// src/components/ToolTipWrapper.tsx
+import {
+  useState as useState5,
+  useRef,
+  useMemo,
+  useCallback
+} from "react";
+import { Loader2 as Loader22 } from "lucide-react";
+import { Fragment as Fragment3, jsx as jsx5, jsxs as jsxs5 } from "react/jsx-runtime";
+var TooltipWrapper = ({ label, children, url, fullWidth = false }) => {
+  const [visible, setVisible] = useState5(false);
+  const [thumbnailLoading, setThumbnailLoading] = useState5(false);
+  const [thumbnailError, setThumbnailError] = useState5(false);
+  const timeoutRef = useRef(null);
+  const isHovering = useRef(false);
+  const isPdf = useMemo(() => url?.toLowerCase().endsWith(".pdf") ?? false, [url]);
+  const handleMouseEnter = useCallback(() => {
+    isHovering.current = true;
+    timeoutRef.current = setTimeout(() => {
+      if (isHovering.current) {
+        setVisible(true);
+        if (isPdf) {
+          setThumbnailLoading(true);
+          setThumbnailError(false);
+        }
+      }
+    }, 500);
+  }, [isPdf]);
+  const handleMouseLeave = useCallback(() => {
+    isHovering.current = false;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setVisible(false);
+    setThumbnailLoading(false);
+  }, []);
+  const handleThumbnailLoad = () => setThumbnailLoading(false);
+  const handleThumbnailError = () => {
+    setThumbnailLoading(false);
+    setThumbnailError(true);
+  };
+  return /* @__PURE__ */ jsxs5(
+    "div",
+    {
+      className: `relative group ${fullWidth ? "w-full" : "inline-block"}`,
+      onMouseEnter: handleMouseEnter,
+      onMouseLeave: handleMouseLeave,
+      children: [
+        children,
+        visible && /* @__PURE__ */ jsx5(Fragment3, { children: isPdf ? /* @__PURE__ */ jsx5(
+          "div",
+          {
+            role: "tooltip",
+            "aria-label": label,
+            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#1a1a1a] border border-[#333] rounded-md shadow-xl z-50 p-2 w-[220px] max-w-[90vw] transition-all duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
+            children: /* @__PURE__ */ jsxs5("div", { className: "flex flex-col items-center", children: [
+              /* @__PURE__ */ jsx5("div", { className: "text-xs text-white mb-1 font-medium", children: label }),
+              /* @__PURE__ */ jsxs5("div", { className: "relative w-full h-[260px] bg-[#111] rounded overflow-hidden", children: [
+                thumbnailLoading && /* @__PURE__ */ jsx5("div", { className: "absolute inset-0 flex items-center justify-center bg-[#111]", children: /* @__PURE__ */ jsx5(Loader22, { className: "h-6 w-6 animate-spin text-white/70" }) }),
+                thumbnailError ? /* @__PURE__ */ jsx5("div", { className: "absolute inset-0 flex items-center justify-center text-white/70 text-xs p-2 text-center", children: "Unable to generate preview" }) : /* @__PURE__ */ jsx5(
+                  "embed",
+                  {
+                    src: url,
+                    type: "application/pdf",
+                    className: "w-full h-full min-h-[260px]",
+                    onLoad: handleThumbnailLoad,
+                    onError: handleThumbnailError
+                  }
+                ),
+                /* @__PURE__ */ jsx5("div", { className: "absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2", children: /* @__PURE__ */ jsxs5("div", { className: "flex items-center justify-between text-xs text-white", children: [
+                  /* @__PURE__ */ jsx5("span", { className: "truncate max-w-[140px]", children: "PDF Document" }),
+                  /* @__PURE__ */ jsx5("span", { className: "text-white/70", children: "Preview" })
+                ] }) })
+              ] })
+            ] })
+          }
+        ) : /* @__PURE__ */ jsx5(
+          "div",
+          {
+            role: "tooltip",
+            "aria-label": label,
+            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-red-600 text-white rounded-md shadow-md z-50 whitespace-nowrap transition-all duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
+            children: label
+          }
+        ) })
+      ]
+    }
+  );
+};
+var ToolTipWrapper_default = TooltipWrapper;
+export {
   ContactFormModal,
   ExternalLinkHandler,
-  Footer,
-  PDFModalViewer,
+  PDFModalViewer_default as PDFModalViewer,
   SecurityPolicyModal,
-  TooltipWrapper,
+  ToolTipWrapper_default as TooltipWrapper,
   useExternalLink
-});
+};
+//# sourceMappingURL=index.js.map

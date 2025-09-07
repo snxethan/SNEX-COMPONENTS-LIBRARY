@@ -1,7 +1,5 @@
-import "./styles/index.css";
-export { default as Footer } from "./Footer"
-export { ExternalLinkHandler, useExternalLink } from "./ExternalLinkHandler";
-export { default as TooltipWrapper } from "./ToolTipWrapper"
-export { default as ContactFormModal } from "./ContactFormModal"
-export { default as PDFModalViewer } from "./PDFModalViewer"
-export { default as SecurityPolicyModal } from "./SecurityPolicyModal"
+export { default as ContactFormModal } from './components/ContactFormModal'
+export { ExternalLinkHandler, useExternalLink } from './components/ExternalLinkHandler'
+export { default as PDFModalViewer } from './components/PDFModalViewer'
+export { default as SecurityPolicyModal } from './components/SecurityPolicyModal'
+export { default as TooltipWrapper } from './components/ToolTipWrapper'

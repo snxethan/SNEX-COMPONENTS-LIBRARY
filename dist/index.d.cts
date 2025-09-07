@@ -1,8 +1,11 @@
-import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as react from 'react';
 import react__default, { ReactNode } from 'react';
+import * as react_jsx_runtime from 'react/jsx-runtime';
 
-declare const Footer: () => react_jsx_runtime.JSX.Element;
+interface Props {
+    onClose: () => void;
+}
+declare function ContactFormModal({ onClose }: Props): react.ReactPortal | null;
 
 interface ExternalLinkContextType {
     showWarning: boolean;
@@ -16,19 +19,6 @@ declare const ExternalLinkHandler: ({ children }: {
 }) => react_jsx_runtime.JSX.Element;
 declare const useExternalLink: () => ExternalLinkContextType;
 
-interface PdfThumbnailTooltipProps {
-    label: string;
-    children: ReactNode;
-    url?: string;
-    fullWidth?: boolean;
-}
-declare const TooltipWrapper: ({ label, children, url, fullWidth }: PdfThumbnailTooltipProps) => react_jsx_runtime.JSX.Element;
-
-interface Props {
-    onClose: () => void;
-}
-declare function ContactFormModal({ onClose }: Props): react.ReactPortal;
-
 interface PDFModalViewerProps {
     pdfUrl: string | null;
     onClose: () => void;
@@ -40,4 +30,12 @@ interface SecurityPolicyModalProps {
 }
 declare function SecurityPolicyModal({ onClose }: SecurityPolicyModalProps): react_jsx_runtime.JSX.Element;
 
-export { ContactFormModal, ExternalLinkHandler, Footer, PDFModalViewer, SecurityPolicyModal, TooltipWrapper, useExternalLink };
+interface PdfThumbnailTooltipProps {
+    label: string;
+    children: ReactNode;
+    url?: string;
+    fullWidth?: boolean;
+}
+declare const TooltipWrapper: ({ label, children, url, fullWidth }: PdfThumbnailTooltipProps) => react_jsx_runtime.JSX.Element;
+
+export { ContactFormModal, ExternalLinkHandler, PDFModalViewer, SecurityPolicyModal, TooltipWrapper, useExternalLink };

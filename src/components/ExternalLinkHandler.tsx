@@ -1,5 +1,5 @@
 "use client"
-import "./styles/index.css";
+
 import React, {
   createContext,
   useContext,
@@ -67,7 +67,7 @@ export const ExternalLinkHandler = ({ children }: { children: ReactNode }) => {
       {children}
         {isVisible && (
           <div
-            className="fixed inset-0 z-[80] flex items-center justify-center backdrop-blur-sm bg-black/40 animate-fade-in p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40 animate-fade-in p-4"
             onClick={closeWarning}
           >
             <div
