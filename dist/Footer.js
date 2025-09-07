@@ -1,0 +1,24 @@
+"use client";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_runtime_1 = require("react/jsx-runtime");
+const react_1 = require("react");
+const image_1 = __importDefault(require("next/image"));
+const link_1 = __importDefault(require("next/link"));
+const ToolTipWrapper_1 = __importDefault(require("../ToolTipWrapper"));
+const SecurityPolicyModal_1 = __importDefault(require("../SecurityPolicyModal"));
+const Footer = () => {
+    const [showSecurityPolicy, setShowSecurityPolicy] = (0, react_1.useState)(false);
+    const [loading, setLoading] = (0, react_1.useState)(true);
+    (0, react_1.useEffect)(() => {
+        setLoading(false);
+    }, []);
+    if (loading) {
+        return ((0, jsx_runtime_1.jsx)("footer", { className: "bg-[#121212] text-gray-400 w-full py-6 px-6", children: (0, jsx_runtime_1.jsx)("div", { className: "max-w-8xl mx-auto flex flex-col items-center gap-6", children: (0, jsx_runtime_1.jsxs)("div", { className: "w-full flex flex-col lg:flex-row items-center justify-between gap-4 text-sm", children: [(0, jsx_runtime_1.jsx)("div", { className: "order-3 lg:order-1 mt-2 lg:mt-0", children: (0, jsx_runtime_1.jsx)("div", { className: "h-5 w-24 bg-[#333333] rounded animate-pulse" }) }), (0, jsx_runtime_1.jsxs)("div", { className: "order-1 lg:order-2 flex items-center gap-2", children: [(0, jsx_runtime_1.jsx)("div", { className: "w-8 h-8 rounded-full bg-[#333333] animate-pulse" }), (0, jsx_runtime_1.jsx)("div", { className: "h-5 w-40 bg-[#333333] rounded animate-pulse" })] }), (0, jsx_runtime_1.jsx)("div", { className: "order-2 lg:order-3", children: (0, jsx_runtime_1.jsxs)("div", { className: "footer-links flex flex-col sm:flex-row items-center gap-2", children: [(0, jsx_runtime_1.jsxs)("div", { className: "flex gap-4", children: [(0, jsx_runtime_1.jsx)("div", { className: "h-5 w-16 bg-[#333333] rounded animate-pulse" }), (0, jsx_runtime_1.jsx)("div", { className: "h-5 w-24 bg-[#333333] rounded animate-pulse" })] }), (0, jsx_runtime_1.jsx)("span", { className: "hidden sm:block text-gray-600", children: "|" }), (0, jsx_runtime_1.jsx)("div", { className: "h-5 w-32 bg-[#333333] rounded animate-pulse" })] }) })] }) }) }));
+    }
+    return ((0, jsx_runtime_1.jsxs)("footer", { className: "bg-[#121212] text-gray-400 w-full py-6 px-6", children: [(0, jsx_runtime_1.jsx)("div", { className: "max-w-8xl mx-auto flex flex-col items-center gap-6", children: (0, jsx_runtime_1.jsxs)("div", { className: "w-full flex flex-col lg:flex-row items-center justify-between gap-4 text-sm", children: [(0, jsx_runtime_1.jsx)("div", { className: "order-3 lg:order-1 mt-2 lg:mt-0", children: (0, jsx_runtime_1.jsx)(ToolTipWrapper_1.default, { label: "View Security Policy", children: (0, jsx_runtime_1.jsx)("button", { onClick: () => setShowSecurityPolicy(true), className: "text-sm text-gray-400 hover:text-red-600 transition-colors duration-200", children: "Security Policy" }) }) }), (0, jsx_runtime_1.jsxs)("div", { className: "order-1 lg:order-2 flex items-center gap-2", children: [(0, jsx_runtime_1.jsx)(image_1.default, { src: "/images/avatar/snex.png", alt: "Ethan Townsend", width: 32, height: 32, className: "rounded-full" }), (0, jsx_runtime_1.jsx)(ToolTipWrapper_1.default, { label: "Social Page", children: (0, jsx_runtime_1.jsxs)("a", { href: "https://ethantownsend.dev", className: "text-sm text-gray-400 hover:text-red-600 transition-colors duration-200", children: ["Ethan Townsend \u00A9 ", new Date().getFullYear()] }) })] }), (0, jsx_runtime_1.jsx)("div", { className: "order-2 lg:order-3", children: (0, jsx_runtime_1.jsxs)("div", { className: "footer-links flex flex-col sm:flex-row items-center gap-2", children: [(0, jsx_runtime_1.jsx)(ToolTipWrapper_1.default, { label: "Portfolio", children: (0, jsx_runtime_1.jsxs)("div", { className: "flex gap-4", children: [(0, jsx_runtime_1.jsx)(link_1.default, { href: "https://snex.dev", className: "hover:text-red-600 transition-colors duration-200", children: "snex.dev" }), (0, jsx_runtime_1.jsx)(link_1.default, { href: "https://snxethan.dev", className: "hover:text-red-600 transition-colors duration-200", children: "snxethan.dev" })] }) }), (0, jsx_runtime_1.jsx)("span", { className: "hidden sm:block text-gray-600", children: "|" }), (0, jsx_runtime_1.jsx)(ToolTipWrapper_1.default, { label: "Social Page", children: (0, jsx_runtime_1.jsx)(link_1.default, { href: "https://ethantownsend.dev", className: "hover:text-red-600 transition-colors duration-200", children: "ethantownsend.dev" }) })] }) })] }) }), showSecurityPolicy && (0, jsx_runtime_1.jsx)(SecurityPolicyModal_1.default, { onClose: () => setShowSecurityPolicy(false) })] }));
+};
+exports.default = Footer;
