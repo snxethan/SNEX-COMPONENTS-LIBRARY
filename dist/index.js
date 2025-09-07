@@ -1,3 +1,5 @@
+"use client";
+
 // src/components/ContactFormModal.tsx
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
