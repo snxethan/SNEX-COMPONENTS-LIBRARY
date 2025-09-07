@@ -7,12 +7,12 @@ A modern, TypeScript-ready React component library designed for web applications
 
 ## Features
 
-- 🚀 **Modern React Components** - Built with React 18+ and TypeScript
-- 🎨 **Tailwind CSS Integration** - Pre-configured with custom animations and utilities
-- 📱 **Responsive Design** - Mobile-first approach for all components
-- ♿ **Accessibility** - WCAG compliant components
-- 📦 **Tree Shakeable** - Import only what you need
-- 🔧 **Easy Integration** - Simple setup with Next.js and other React frameworks
+- **Modern React Components** - Built with React 18+ and TypeScript
+- **Tailwind CSS Integration** - Pre-configured with custom animations and utilities
+- **Responsive Design** - Mobile-first approach for all components
+- **Accessibility** - WCAG compliant components
+- **Tree Shakeable** - Import only what you need
+- **Easy Integration** - Simple setup with Next.js and other React frameworks
 
 ## Requirements
 
@@ -286,13 +286,9 @@ The library uses [tsup](https://tsup.egoist.dev/) for building with the followin
 - TypeScript declaration files
 - CSS bundle with custom animations
 
-## Contributing
+## Author(s)
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License.
+- [**Ethan Townsend (snxethan)**](https://www.ethantownsend.dev)
 
 ## Support
 
