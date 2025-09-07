@@ -1,5 +1,5 @@
 "use client"
-
+import "./styles/index.css";
 import { useState, useEffect } from "react"
 import ContactFormModal from "./ContactFormModal"
 import { FaShieldAlt, FaUserShield, FaLink, FaCookie } from "react-icons/fa"

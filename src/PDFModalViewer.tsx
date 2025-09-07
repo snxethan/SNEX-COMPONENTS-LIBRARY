@@ -1,5 +1,5 @@
 "use client"
-
+import "./styles/index.css";
 import React, { useEffect, useState } from "react"
 import { X, Download, Loader2, ExternalLinkIcon } from "lucide-react"
 import { FaExternalLinkAlt } from "react-icons/fa";

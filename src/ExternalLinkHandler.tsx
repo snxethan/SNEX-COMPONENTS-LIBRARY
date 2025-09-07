@@ -1,5 +1,5 @@
 "use client"
-
+import "./styles/index.css";
 import React, {
   createContext,
   useContext,

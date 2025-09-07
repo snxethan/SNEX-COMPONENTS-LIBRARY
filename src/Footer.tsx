@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react"
 import TooltipWrapper from "./ToolTipWrapper"
 import SecurityPolicyModal from "./SecurityPolicyModal"
+import "./styles/index.css";
 
 const Footer = () => {
   const [showSecurityPolicy, setShowSecurityPolicy] = useState(false)
