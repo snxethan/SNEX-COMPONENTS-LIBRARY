@@ -92,7 +92,7 @@ var TooltipWrapper = ({ label, children, url, fullWidth = false }) => {
           {
             role: "tooltip",
             "aria-label": label,
-            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#1a1a1a] border border-[#333] rounded-md shadow-xl z-50 p-2 w-[220px] max-w-[90vw] transition-all duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
+            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#1a1a1a] border border-[#333] rounded-md shadow-xl z-[70] p-2 w-[220px] max-w-[90vw] transition-all duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
             children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col items-center", children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "text-xs text-white mb-1 font-medium", children: label }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "relative w-full h-[260px] bg-[#111] rounded overflow-hidden", children: [
@@ -119,7 +119,7 @@ var TooltipWrapper = ({ label, children, url, fullWidth = false }) => {
           {
             role: "tooltip",
             "aria-label": label,
-            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-red-600 text-white rounded-md shadow-md z-50 whitespace-nowrap transition-all duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
+            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-red-600 text-white rounded-md shadow-md z-[70] whitespace-nowrap transition-all duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
             children: label
           }
         ) })
@@ -266,7 +266,7 @@ function SecurityPolicyModal({ onClose }) {
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
     "div",
     {
-      className: "fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in",
+      className: "fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-fade-in",
       onClick: (e) => {
         if (e.target === e.currentTarget) handleClose();
       },
@@ -479,7 +479,7 @@ var ExternalLinkHandler = ({ children }) => {
         isVisible && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
           "div",
           {
-            className: "fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40 animate-fade-in p-4",
+            className: "fixed inset-0 z-[80] flex items-center justify-center backdrop-blur-sm bg-black/40 animate-fade-in p-4",
             onClick: closeWarning,
             children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
               "div",
@@ -592,7 +592,7 @@ var PDFModalViewer = ({ pdfUrl, onClose }) => {
     /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
       "div",
       {
-        className: "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-16",
+        className: "fixed inset-0 z-[90] flex items-center justify-center bg-black/60 backdrop-blur-sm p-16",
         onClick: (e) => {
           if (e.target === e.currentTarget) initiateClose();
         },
@@ -634,7 +634,7 @@ var PDFModalViewer = ({ pdfUrl, onClose }) => {
                   "iframe",
                   {
                     src: pdfUrl,
-                    className: "w-full min-h-[600px] h-[calc(100vh-150px)] max-h-[75vh] border-none",
+                    className: "w-full h-full min-h-[500px] border-none",
                     onLoad: () => setIsLoading(false),
                     loading: "lazy"
                   }

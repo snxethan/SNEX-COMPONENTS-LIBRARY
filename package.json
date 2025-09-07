@@ -10,14 +10,21 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts"
   },
-"peerDependencies": {
-  "react": ">=18",
-  "react-dom": ">=18",
-  "tailwindcss": ">=3"
-},
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "tailwindcss": ">=3"
+  },
   "dependencies": {
+    "lucide-react": "^0.279.0",
     "react-hot-toast": "^2.4.1",
-    "react-icons": "^5.0.0",
-    "lucide-react": "^0.279.0"
+    "react-icons": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
   }
 }
