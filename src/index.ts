@@ -1,7 +1,7 @@
 import "./styles/index.css";
 
 export { default as Footer } from "./Footer"
-export { ExternalLinkHandler } from "./ExternalLinkHandler"
+export { ExternalLinkHandler, useExternalLink } from "./ExternalLinkHandler";
 export { default as TooltipWrapper } from "./ToolTipWrapper"
 export { default as ContactFormModal } from "./ContactFormModal"
 export { default as PDFModalViewer } from "./PDFModalViewer"
