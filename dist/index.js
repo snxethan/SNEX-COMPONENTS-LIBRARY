@@ -371,60 +371,158 @@ var Footer = () => {
   (0, import_react4.useEffect)(() => {
     setLoading(false);
   }, []);
-  if (loading) {
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("footer", { className: "bg-[#121212] text-gray-400 w-full py-6 px-6", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "max-w-8xl mx-auto flex flex-col items-center gap-6", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "w-full flex flex-col lg:flex-row items-center justify-between gap-4 text-sm", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "order-3 lg:order-1 mt-2 lg:mt-0", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "h-5 w-24 bg-[#333333] rounded animate-pulse" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "order-1 lg:order-2 flex items-center gap-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "w-8 h-8 rounded-full bg-[#333333] animate-pulse" }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "h-5 w-40 bg-[#333333] rounded animate-pulse" })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "order-2 lg:order-3", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "footer-links flex flex-col sm:flex-row items-center gap-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex gap-4", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "h-5 w-16 bg-[#333333] rounded animate-pulse" }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "h-5 w-24 bg-[#333333] rounded animate-pulse" })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "hidden sm:block text-gray-600", children: "|" }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "h-5 w-32 bg-[#333333] rounded animate-pulse" })
-      ] }) })
-    ] }) }) });
-  }
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("footer", { className: "bg-[#121212] text-gray-400 w-full py-6 px-6", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "max-w-8xl mx-auto flex flex-col items-center gap-6", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "w-full flex flex-col lg:flex-row items-center justify-between gap-4 text-sm", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "order-3 lg:order-1 mt-2 lg:mt-0", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "View Security Policy", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-        "button",
-        {
-          onClick: () => setShowSecurityPolicy(true),
-          className: "text-sm text-gray-400 hover:text-red-600 transition-colors duration-200",
-          children: "Security Policy"
-        }
-      ) }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "order-1 lg:order-2 flex items-center gap-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-          "img",
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("footer", { className: "footer", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "footer-container", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "footer-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "footer-left", children: !loading ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "View Security Policy", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+          "button",
           {
-            src: "/images/avatar/snex.png",
-            alt: "Ethan Townsend",
-            width: 32,
-            height: 32,
-            className: "rounded-full",
-            style: { display: "block" }
+            onClick: () => setShowSecurityPolicy(true),
+            className: "footer-link-button",
+            children: "Security Policy"
           }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("a", { href: "https://ethantownsend.dev", className: "text-sm text-gray-400 hover:text-red-600 transition-colors duration-200", children: [
-          "Ethan Townsend \xA9 ",
-          (/* @__PURE__ */ new Date()).getFullYear()
-        ] }) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "order-2 lg:order-3", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "footer-links flex flex-col sm:flex-row items-center gap-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Portfolio", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "flex gap-4", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://snex.dev", className: "hover:text-red-600 transition-colors duration-200", children: "snex.dev" }),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://snxethan.dev", className: "hover:text-red-600 transition-colors duration-200", children: "snxethan.dev" })
+        ) }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-sm" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "footer-center", children: !loading ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+            "img",
+            {
+              src: "/images/avatar/snex.png",
+              alt: "Ethan Townsend",
+              width: 32,
+              height: 32,
+              className: "avatar"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("a", { href: "https://ethantownsend.dev", className: "footer-link-button", children: [
+            "Ethan Townsend \xA9 ",
+            (/* @__PURE__ */ new Date()).getFullYear()
+          ] }) })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-circle" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-md" })
         ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "hidden sm:block text-gray-600", children: "|" }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://ethantownsend.dev", className: "hover:text-red-600 transition-colors duration-200", children: "ethantownsend.dev" }) })
-      ] }) })
-    ] }) }),
-    showSecurityPolicy && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(SecurityPolicyModal, { onClose: () => setShowSecurityPolicy(false) })
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "footer-right", children: !loading ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "footer-links", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Portfolio", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "domain-links", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://snex.dev", className: "footer-link-button", children: "snex.dev" }),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://snxethan.dev", className: "footer-link-button", children: "snxethan.dev" })
+          ] }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "divider", children: "|" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: "https://ethantownsend.dev", className: "footer-link-button", children: "ethantownsend.dev" }) })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-sm" }),
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "skeleton skeleton-md" })
+        ] }) })
+      ] }) }),
+      showSecurityPolicy && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(SecurityPolicyModal, { onClose: () => setShowSecurityPolicy(false) })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("style", { children: `
+        .footer {
+          background: #121212;
+          color: #9ca3af;
+          width: 100%;
+          padding: 1.5rem;
+        }
+        .footer-container {
+          max-width: 90rem;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          align-items: center;
+        }
+        .footer-row {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+          font-size: 0.875rem;
+        }
+        @media (min-width: 1024px) {
+          .footer-row {
+            flex-direction: row;
+            justify-content: space-between;
+            text-align: left;
+          }
+        }
+        .footer-left,
+        .footer-right,
+        .footer-center {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .footer-right {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        @media (min-width: 640px) {
+          .footer-right {
+            flex-direction: row;
+          }
+        }
+        .footer-links {
+          display: flex;
+          flex-direction: row;
+          gap: 1rem;
+          align-items: center;
+          justify-content: center;
+        }
+        .domain-links {
+          display: flex;
+          gap: 1rem;
+        }
+        .divider {
+          display: none;
+          color: #4b5563;
+        }
+        @media (min-width: 640px) {
+          .divider {
+            display: inline-block;
+          }
+        }
+        .footer-link-button {
+          font-size: 0.875rem;
+          color: #9ca3af;
+          background: none;
+          border: none;
+          cursor: pointer;
+          transition: color 0.2s ease;
+        }
+        .footer-link-button:hover {
+          color: #dc2626;
+        }
+        .avatar {
+          border-radius: 50%;
+          display: block;
+        }
+        .skeleton {
+          background: #333;
+          border-radius: 0.25rem;
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+        .skeleton-circle {
+          width: 2rem;
+          height: 2rem;
+          border-radius: 50%;
+        }
+        .skeleton-sm {
+          width: 6rem;
+          height: 1.25rem;
+        }
+        .skeleton-md {
+          width: 10rem;
+          height: 1.25rem;
+        }
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 0.6;
+          }
+          50% {
+            opacity: 1;
+          }
+        }
+      ` })
   ] });
 };
 var Footer_default = Footer;

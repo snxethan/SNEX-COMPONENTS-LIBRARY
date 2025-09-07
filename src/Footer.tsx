@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react"
 import TooltipWrapper from "./ToolTipWrapper"
 import SecurityPolicyModal from "./SecurityPolicyModal"
-import "./styles/index.css";
 
 const Footer = () => {
   const [showSecurityPolicy, setShowSecurityPolicy] = useState(false)
@@ -12,96 +11,195 @@ const Footer = () => {
     setLoading(false)
   }, [])
 
-  if (loading) {
-    return (
-      <footer className="bg-[#121212] text-gray-400 w-full py-6 px-6">
-        <div className="max-w-8xl mx-auto flex flex-col items-center gap-6">
-          <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-4 text-sm">
-            {/* Left: Security Policy Skeleton */}
-            <div className="order-3 lg:order-1 mt-2 lg:mt-0">
-              <div className="h-5 w-24 bg-[#333333] rounded animate-pulse" />
-            </div>
-
-            {/* Center: Logo & Name Skeleton */}
-            <div className="order-1 lg:order-2 flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#333333] animate-pulse" />
-              <div className="h-5 w-40 bg-[#333333] rounded animate-pulse" />
-            </div>
-
-            {/* Right: Domain Links Skeleton */}
-            <div className="order-2 lg:order-3">
-              <div className="footer-links flex flex-col sm:flex-row items-center gap-2">
-                <div className="flex gap-4">
-                  <div className="h-5 w-16 bg-[#333333] rounded animate-pulse" />
-                  <div className="h-5 w-24 bg-[#333333] rounded animate-pulse" />
-                </div>
-                <span className="hidden sm:block text-gray-600">|</span>
-                <div className="h-5 w-32 bg-[#333333] rounded animate-pulse" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
-    )
-  }
   return (
-    <footer className="bg-[#121212] text-gray-400 w-full py-6 px-6">
-      <div className="max-w-8xl mx-auto flex flex-col items-center gap-6">
-        <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-4 text-sm">
-          {/* Left: Security Policy */}
-          <div className="order-3 lg:order-1 mt-2 lg:mt-0">
-            <TooltipWrapper label="View Security Policy">
-              <button 
-                onClick={() => setShowSecurityPolicy(true)}
-                className="text-sm text-gray-400 hover:text-red-600 transition-colors duration-200"
-              >
-                Security Policy
-              </button>
-            </TooltipWrapper>
-          </div>
+    <>
+      <footer className="footer">
+        <div className="footer-container">
+          <div className="footer-row">
+            {/* Left: Security Policy */}
+            <div className="footer-left">
+              {!loading ? (
+                <TooltipWrapper label="View Security Policy">
+                  <button 
+                    onClick={() => setShowSecurityPolicy(true)}
+                    className="footer-link-button"
+                  >
+                    Security Policy
+                  </button>
+                </TooltipWrapper>
+              ) : (
+                <div className="skeleton skeleton-sm" />
+              )}
+            </div>
 
-          {/* Center: Logo & Name */}
-          <div className="order-1 lg:order-2 flex items-center gap-2">
-            <img
-              src="/images/avatar/snex.png"
-              alt="Ethan Townsend"
-              width={32}
-              height={32}
-              className="rounded-full"
-              style={{ display: 'block' }}
-            />
-            <TooltipWrapper label="Social Page">
-              <a href="https://ethantownsend.dev" className="text-sm text-gray-400 hover:text-red-600 transition-colors duration-200">
-                Ethan Townsend &copy; {new Date().getFullYear()}
-              </a>
-            </TooltipWrapper>
-          </div>
+            {/* Center: Logo & Name */}
+            <div className="footer-center">
+              {!loading ? (
+                <>
+                  <img
+                    src="/images/avatar/snex.png"
+                    alt="Ethan Townsend"
+                    width={32}
+                    height={32}
+                    className="avatar"
+                  />
+                  <TooltipWrapper label="Social Page">
+                    <a href="https://ethantownsend.dev" className="footer-link-button">
+                      Ethan Townsend &copy; {new Date().getFullYear()}
+                    </a>
+                  </TooltipWrapper>
+                </>
+              ) : (
+                <>
+                  <div className="skeleton skeleton-circle" />
+                  <div className="skeleton skeleton-md" />
+                </>
+              )}
+            </div>
 
-{/* Right: Domain Links */}
-          <div className="order-2 lg:order-3">
-            <div className="footer-links flex flex-col sm:flex-row items-center gap-2">
-              <TooltipWrapper label="Portfolio">
-                <div className="flex gap-4">
-                  <a href="https://snex.dev" className="hover:text-red-600 transition-colors duration-200">
-                    snex.dev    
-                  </a>
-                  <a href="https://snxethan.dev" className="hover:text-red-600 transition-colors duration-200">
-                    snxethan.dev
-                  </a>
+            {/* Right: Domain Links */}
+            <div className="footer-right">
+              {!loading ? (
+                <div className="footer-links">
+                  <TooltipWrapper label="Portfolio">
+                    <div className="domain-links">
+                      <a href="https://snex.dev" className="footer-link-button">
+                        snex.dev    
+                      </a>
+                      <a href="https://snxethan.dev" className="footer-link-button">
+                        snxethan.dev
+                      </a>
+                    </div>
+                  </TooltipWrapper>
+                  <span className="divider">|</span>
+                  <TooltipWrapper label="Social Page">
+                    <a href="https://ethantownsend.dev" className="footer-link-button">
+                      ethantownsend.dev
+                    </a>
+                  </TooltipWrapper>
                 </div>
-              </TooltipWrapper>
-              <span className="hidden sm:block text-gray-600">|</span>
-              <TooltipWrapper label="Social Page">
-                <a href="https://ethantownsend.dev" className="hover:text-red-600 transition-colors duration-200">
-                  ethantownsend.dev
-                </a>
-              </TooltipWrapper>
+              ) : (
+                <>
+                  <div className="skeleton skeleton-sm" />
+                  <div className="skeleton skeleton-md" />
+                </>
+              )}
             </div>
           </div>
         </div>
-      </div>
-      {showSecurityPolicy && <SecurityPolicyModal onClose={() => setShowSecurityPolicy(false)} />}
-    </footer>
+        {showSecurityPolicy && <SecurityPolicyModal onClose={() => setShowSecurityPolicy(false)} />}
+      </footer>
+
+      {/* Inline CSS */}
+      <style>{`
+        .footer {
+          background: #121212;
+          color: #9ca3af;
+          width: 100%;
+          padding: 1.5rem;
+        }
+        .footer-container {
+          max-width: 90rem;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          align-items: center;
+        }
+        .footer-row {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+          font-size: 0.875rem;
+        }
+        @media (min-width: 1024px) {
+          .footer-row {
+            flex-direction: row;
+            justify-content: space-between;
+            text-align: left;
+          }
+        }
+        .footer-left,
+        .footer-right,
+        .footer-center {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .footer-right {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        @media (min-width: 640px) {
+          .footer-right {
+            flex-direction: row;
+          }
+        }
+        .footer-links {
+          display: flex;
+          flex-direction: row;
+          gap: 1rem;
+          align-items: center;
+          justify-content: center;
+        }
+        .domain-links {
+          display: flex;
+          gap: 1rem;
+        }
+        .divider {
+          display: none;
+          color: #4b5563;
+        }
+        @media (min-width: 640px) {
+          .divider {
+            display: inline-block;
+          }
+        }
+        .footer-link-button {
+          font-size: 0.875rem;
+          color: #9ca3af;
+          background: none;
+          border: none;
+          cursor: pointer;
+          transition: color 0.2s ease;
+        }
+        .footer-link-button:hover {
+          color: #dc2626;
+        }
+        .avatar {
+          border-radius: 50%;
+          display: block;
+        }
+        .skeleton {
+          background: #333;
+          border-radius: 0.25rem;
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+        .skeleton-circle {
+          width: 2rem;
+          height: 2rem;
+          border-radius: 50%;
+        }
+        .skeleton-sm {
+          width: 6rem;
+          height: 1.25rem;
+        }
+        .skeleton-md {
+          width: 10rem;
+          height: 1.25rem;
+        }
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 0.6;
+          }
+          50% {
+            opacity: 1;
+          }
+        }
+      `}</style>
+    </>
   )
 }
 
