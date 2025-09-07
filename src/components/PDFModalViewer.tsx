@@ -1,110 +1,166 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { X, Loader2 } from "lucide-react"
-import { FaExternalLinkAlt } from "react-icons/fa"
-import { createPortal } from "react-dom"
+import { useEffect, useMemo, useRef, useState } from "react";
+import { X, Loader2 } from "lucide-react";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import { createPortal } from "react-dom";
 
 interface PDFModalViewerProps {
-  pdfUrl: string | null
-  onClose: () => void
+  pdfUrl: string | null;
+  onClose: () => void;
 }
 
-const isPdfSupported = (): boolean => {
-  const ua = navigator.userAgent.toLowerCase()
-  const isIOS = /iphone|ipad|ipod/.test(ua)
-  const isSafari = /safari/.test(ua) && !/chrome/.test(ua)
-  const isMobile = /android|iphone|ipad|mobile/.test(ua)
-  return !(isIOS || isSafari || isMobile)
-}
+// Allow Safari on macOS, block iOS & most mobile for iframe previews
+const isPdfEmbedSupported = (): boolean => {
+  const ua = navigator.userAgent.toLowerCase();
+  const isIOS = /iphone|ipad|ipod/.test(ua);
+  const isMobile = /android|iphone|ipad|mobile/.test(ua);
+  const isSafari = /safari/.test(ua) && !/chrome|crios|fxios/.test(ua);
+  const isMac = /macintosh|mac os x/.test(ua);
+  // iOS: no; Android mobile: often flaky; Safari only allowed on macOS
+  return !(isIOS || (isSafari && !isMac) || (isMobile && !isSafari));
+};
 
 const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
-  const [isVisible, setIsVisible] = useState(false)
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false)
-  const [isUnsupported, setIsUnsupported] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [visible, setVisible] = useState(false);
+  const [animOut, setAnimOut] = useState(false);
+  const [unsupported, setUnsupported] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const openInNewTab = () => {
+    if (pdfUrl) window.open(pdfUrl, "_blank", "noopener,noreferrer");
+  };
+
+  // Build once per URL (reset loading state)
   useEffect(() => {
-    if (pdfUrl) {
-      setIsVisible(true)
-      setIsUnsupported(!isPdfSupported())
+    if (!pdfUrl) return;
+    setVisible(true);
+    setUnsupported(!isPdfEmbedSupported());
+    setLoading(true);
 
-      const originalOverflow = document.body.style.overflow
-      document.body.style.overflow = "hidden"
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-      const handleEscKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") initiateClose()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") initiateClose();
+      if (e.key === "Tab") {
+        // focus trap
+        const root = modalRef.current;
+        if (!root) return;
+        const focusables = root.querySelectorAll<HTMLElement>(
+          'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
+    };
+    window.addEventListener("keydown", onKey);
 
-      window.addEventListener("keydown", handleEscKey)
-      return () => {
-        document.body.style.overflow = originalOverflow
-        window.removeEventListener("keydown", handleEscKey)
-      }
-    }
-  }, [pdfUrl])
+    // Focus the primary action after mount
+    setTimeout(() => {
+      modalRef.current?.querySelector<HTMLElement>("[data-focus-initial]")?.focus();
+    }, 0);
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [pdfUrl]);
 
   const initiateClose = () => {
-    setIsAnimatingOut(true)
+    setAnimOut(true);
     setTimeout(() => {
-      setIsAnimatingOut(false)
-      setIsVisible(false)
-      onClose()
-    }, 300)
-  }
+      setAnimOut(false);
+      setVisible(false);
+      onClose();
+    }, 300);
+  };
 
-  if (!pdfUrl || !isVisible) return null
+  const containerClasses = useMemo(
+    () =>
+      `fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-8`,
+    []
+  );
+
+  if (!pdfUrl || !visible) return null;
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-16"
+      className={containerClasses}
       onClick={(e) => {
-        if (e.target === e.currentTarget) initiateClose()
+        if (e.target === e.currentTarget) initiateClose();
       }}
     >
       <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pdf-modal-title"
         className={`relative bg-[#1a1a1a] border border-[#333] rounded-xl w-full max-w-4xl max-h-[90vh] shadow-xl overflow-hidden flex flex-col ${
-          isAnimatingOut ? "animate-elastic-out" : "animate-elastic-in"
+          animOut ? "animate-elastic-out" : "animate-elastic-in"
         }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-[#333]">
           <button
-            onClick={() => window.open(pdfUrl || "", "_blank")}
-            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all"
+            type="button"
+            onClick={openInNewTab}
+            data-focus-initial
+            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-all focus:outline-none focus:ring-2 focus:ring-red-600"
             aria-label="Open in new tab"
           >
             <FaExternalLinkAlt size={16} />
             <span className="hidden sm:inline">Open in new tab</span>
           </button>
+          <h2 id="pdf-modal-title" className="sr-only">
+            PDF Preview
+          </h2>
           <button
+            type="button"
             onClick={initiateClose}
-            aria-label="Close Preview"
-            className="text-white hover:text-red-500 transition p-1 rounded-full"
+            aria-label="Close preview"
+            className="text-white hover:text-red-500 transition p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-red-600"
           >
-            <X size={24} />
+            <X size={22} />
           </button>
         </div>
 
-        {/* PDF View / Fallback */}
-        <div className="flex-1 overflow-auto relative bg-[#1a1a1a]">
-          {isUnsupported ? (
-            <div className="flex flex-col items-center justify-center h-full text-white text-sm p-6 text-center space-y-2">
-              <p>PDF preview is not supported on this device or browser.</p>
-              <p>Please open the PDF in a new tab or download it to view.</p>
+        {/* Body */}
+        <div className="relative flex-1 bg-[#1a1a1a]">
+          {unsupported ? (
+            <div className="flex flex-col items-center justify-center h-full text-white text-sm p-6 text-center space-y-3">
+              <p>Inline PDF preview isn’t supported on this device/browser.</p>
+              <button
+                type="button"
+                onClick={openInNewTab}
+                className="mt-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-red-600"
+              >
+                Open PDF in new tab
+              </button>
             </div>
           ) : (
             <>
-              {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-[#1a1a1a] z-10">
+              {loading && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1a1a1a]">
                   <Loader2 className="h-8 w-8 animate-spin text-white" />
                 </div>
               )}
               <iframe
                 src={pdfUrl}
-                className="w-full min-h-[600px] h-[calc(100vh-150px)] max-h-[75vh] border-none"
-                onLoad={() => setIsLoading(false)}
+                title="PDF preview"
+                className="w-full h-[min(80vh,900px)]"
+                onLoad={() => setLoading(false)}
                 loading="lazy"
               />
             </>
@@ -113,7 +169,7 @@ const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
       </div>
     </div>,
     document.body
-  )
-}
+  );
+};
 
-export default PDFModalViewer
+export default PDFModalViewer;

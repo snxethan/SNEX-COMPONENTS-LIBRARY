@@ -36,7 +36,7 @@ interface PdfThumbnailTooltipProps {
     url?: string;
     fullWidth?: boolean;
 }
-declare const TooltipWrapper: ({ label, children, url, fullWidth }: PdfThumbnailTooltipProps) => react_jsx_runtime.JSX.Element;
+declare const TooltipWrapper: ({ label, children, url, fullWidth, }: PdfThumbnailTooltipProps) => react_jsx_runtime.JSX.Element;
 
 type FooterProps = {
     avatarSrc?: string;
@@ -48,6 +48,6 @@ type FooterProps = {
         href: string;
     }[];
 };
-declare const Footer: ({ avatarSrc, name, socialHref, leftLabel, links }: FooterProps) => react_jsx_runtime.JSX.Element;
+declare const Footer: ({ avatarSrc, name, socialHref, leftLabel, links, }: FooterProps) => react_jsx_runtime.JSX.Element;
 
 export { ContactFormModal, ExternalLinkHandler, Footer, PDFModalViewer, SecurityPolicyModal, TooltipWrapper, useExternalLink };
