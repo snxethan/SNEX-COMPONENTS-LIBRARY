@@ -393,7 +393,7 @@ var Footer = () => {
               className: "avatar"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("a", { href: "https://ethantownsend.dev", className: "footer-link-button", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("a", { href: "https://ethantownsend.dev", className: "footer-link-button name-link", children: [
             "Ethan Townsend \xA9 ",
             (/* @__PURE__ */ new Date()).getFullYear()
           ] }) })
@@ -425,16 +425,13 @@ var Footer = () => {
         .footer-container {
           max-width: 90rem;
           margin: 0 auto;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-          align-items: center;
         }
         .footer-row {
           width: 100%;
           display: flex;
           flex-direction: column;
           gap: 1rem;
+          align-items: center;
           text-align: center;
           font-size: 0.875rem;
         }
@@ -443,6 +440,7 @@ var Footer = () => {
             flex-direction: row;
             justify-content: space-between;
             text-align: left;
+            align-items: center;
           }
         }
         .footer-left,
@@ -450,7 +448,15 @@ var Footer = () => {
         .footer-center {
           display: flex;
           align-items: center;
+        }
+        .footer-center {
           gap: 0.5rem;
+          justify-content: center;
+        }
+        .footer-center a.name-link {
+          display: inline-flex;
+          align-items: center;
+          line-height: 1;
         }
         .footer-right {
           flex-direction: column;
@@ -459,6 +465,7 @@ var Footer = () => {
         @media (min-width: 640px) {
           .footer-right {
             flex-direction: row;
+            align-items: center;
           }
         }
         .footer-links {
@@ -488,13 +495,17 @@ var Footer = () => {
           border: none;
           cursor: pointer;
           transition: color 0.2s ease;
+          text-decoration: none;
         }
         .footer-link-button:hover {
           color: #dc2626;
         }
         .avatar {
           border-radius: 50%;
-          display: block;
+          display: inline-block;
+          width: 32px;
+          height: 32px;
+          object-fit: cover;
         }
         .skeleton {
           background: #333;
