@@ -449,6 +449,8 @@ var Footer = () => {
           display: flex;
           align-items: center;
         }
+
+        /* Center alignment */
         .footer-center {
           gap: 0.5rem;
           justify-content: center;
@@ -458,6 +460,8 @@ var Footer = () => {
           align-items: center;
           line-height: 1;
         }
+
+        /* Right section (tightened spacing) */
         .footer-right {
           flex-direction: column;
           gap: 0.5rem;
@@ -465,19 +469,19 @@ var Footer = () => {
         @media (min-width: 640px) {
           .footer-right {
             flex-direction: row;
-            align-items: center;
+            gap: 0.5rem; /* keep it tight */
           }
         }
         .footer-links {
           display: flex;
           flex-direction: row;
-          gap: 1rem;
+          gap: 0.5rem; /* less spacing than before */
           align-items: center;
           justify-content: center;
         }
         .domain-links {
           display: flex;
-          gap: 1rem;
+          gap: 0.5rem;
         }
         .divider {
           display: none;
@@ -488,6 +492,8 @@ var Footer = () => {
             display: inline-block;
           }
         }
+
+        /* Links */
         .footer-link-button {
           font-size: 0.875rem;
           color: #9ca3af;
@@ -500,6 +506,8 @@ var Footer = () => {
         .footer-link-button:hover {
           color: #dc2626;
         }
+
+        /* Avatar */
         .avatar {
           border-radius: 50%;
           display: inline-block;
@@ -507,6 +515,8 @@ var Footer = () => {
           height: 32px;
           object-fit: cover;
         }
+
+        /* Skeleton loading states */
         .skeleton {
           background: #333;
           border-radius: 0.25rem;
@@ -526,12 +536,8 @@ var Footer = () => {
           height: 1.25rem;
         }
         @keyframes pulse {
-          0%, 100% {
-            opacity: 0.6;
-          }
-          50% {
-            opacity: 1;
-          }
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
         }
       ` })
   ] });
