@@ -32,6 +32,7 @@ var index_exports = {};
 __export(index_exports, {
   ContactFormModal: () => ContactFormModal,
   ExternalLinkHandler: () => ExternalLinkHandler,
+  Footer: () => Footer_default,
   PDFModalViewer: () => PDFModalViewer_default,
   SecurityPolicyModal: () => SecurityPolicyModal,
   TooltipWrapper: () => ToolTipWrapper_default,
@@ -575,10 +576,79 @@ var TooltipWrapper = ({ label, children, url, fullWidth = false }) => {
   );
 };
 var ToolTipWrapper_default = TooltipWrapper;
+
+// src/components/Footer.tsx
+var import_react6 = require("react");
+var import_image = __toESM(require("next/image"), 1);
+var import_link = __toESM(require("next/link"), 1);
+var import_jsx_runtime6 = require("react/jsx-runtime");
+var Footer = () => {
+  const [showSecurityPolicy, setShowSecurityPolicy] = (0, import_react6.useState)(false);
+  const [loading, setLoading] = (0, import_react6.useState)(true);
+  (0, import_react6.useEffect)(() => {
+    setLoading(false);
+  }, []);
+  if (loading) {
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("footer", { className: "bg-[#121212] text-gray-400 w-full py-6 px-6", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "max-w-8xl mx-auto flex flex-col items-center gap-6", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "w-full flex flex-col lg:flex-row items-center justify-between gap-4 text-sm", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "order-3 lg:order-1 mt-2 lg:mt-0", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "h-5 w-24 bg-[#333333] rounded animate-pulse" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "order-1 lg:order-2 flex items-center gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "w-8 h-8 rounded-full bg-[#333333] animate-pulse" }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "h-5 w-40 bg-[#333333] rounded animate-pulse" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "order-2 lg:order-3", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "footer-links flex flex-col sm:flex-row items-center gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "flex gap-4", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "h-5 w-16 bg-[#333333] rounded animate-pulse" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "h-5 w-24 bg-[#333333] rounded animate-pulse" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "hidden sm:block text-gray-600", children: "|" }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "h-5 w-32 bg-[#333333] rounded animate-pulse" })
+      ] }) })
+    ] }) }) });
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("footer", { className: "bg-[#121212] text-gray-400 w-full py-6 px-6", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "max-w-8xl mx-auto flex flex-col items-center gap-6", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "w-full flex flex-col lg:flex-row items-center justify-between gap-4 text-sm", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "order-3 lg:order-1 mt-2 lg:mt-0", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(ToolTipWrapper_default, { label: "View Security Policy", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+        "button",
+        {
+          onClick: () => setShowSecurityPolicy(true),
+          className: "text-sm text-gray-400 hover:text-red-600 transition-colors duration-200",
+          children: "Security Policy"
+        }
+      ) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "order-1 lg:order-2 flex items-center gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+          import_image.default,
+          {
+            src: "/images/avatar/snex.png",
+            alt: "Ethan Townsend",
+            width: 32,
+            height: 32,
+            className: "rounded-full"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("a", { href: "https://ethantownsend.dev", className: "text-sm text-gray-400 hover:text-red-600 transition-colors duration-200", children: [
+          "Ethan Townsend \xA9 ",
+          (/* @__PURE__ */ new Date()).getFullYear()
+        ] }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "order-2 lg:order-3", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "footer-links flex flex-col sm:flex-row items-center gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(ToolTipWrapper_default, { label: "Portfolio", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "flex gap-4", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_link.default, { href: "https://snex.dev", className: "hover:text-red-600 transition-colors duration-200", children: "snex.dev" }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_link.default, { href: "https://snxethan.dev", className: "hover:text-red-600 transition-colors duration-200", children: "snxethan.dev" })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "hidden sm:block text-gray-600", children: "|" }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(ToolTipWrapper_default, { label: "Social Page", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_link.default, { href: "https://ethantownsend.dev", className: "hover:text-red-600 transition-colors duration-200", children: "ethantownsend.dev" }) })
+      ] }) })
+    ] }) }),
+    showSecurityPolicy && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(SecurityPolicyModal, { onClose: () => setShowSecurityPolicy(false) })
+  ] });
+};
+var Footer_default = Footer;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ContactFormModal,
   ExternalLinkHandler,
+  Footer,
   PDFModalViewer,
   SecurityPolicyModal,
   TooltipWrapper,
