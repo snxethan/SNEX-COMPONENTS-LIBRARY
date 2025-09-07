@@ -1,13 +1,8 @@
 "use client"
 
-import React, {
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-  ReactNode,
-} from "react"
+import { useState, useRef, useMemo, useCallback, type ReactNode } from "react"
 import { Loader2 } from "lucide-react"
+
 
 interface PdfThumbnailTooltipProps {
   label: string

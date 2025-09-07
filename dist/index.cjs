@@ -273,7 +273,7 @@ var useExternalLink = () => {
 var import_react3 = require("react");
 var import_lucide_react = require("lucide-react");
 var import_fa = require("react-icons/fa");
-var import_react_dom2 = __toESM(require("react-dom"), 1);
+var import_react_dom2 = require("react-dom");
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var isPdfSupported = () => {
   const ua = navigator.userAgent.toLowerCase();
@@ -312,7 +312,7 @@ var PDFModalViewer = ({ pdfUrl, onClose }) => {
     }, 300);
   };
   if (!pdfUrl || !isVisible) return null;
-  return import_react_dom2.default.createPortal(
+  return (0, import_react_dom2.createPortal)(
     /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
       "div",
       {
@@ -332,7 +332,7 @@ var PDFModalViewer = ({ pdfUrl, onClose }) => {
                   {
                     onClick: () => window.open(pdfUrl || "", "_blank"),
                     className: "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all",
-                    "aria-label": "Download or open in new tab",
+                    "aria-label": "Open in new tab",
                     children: [
                       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_fa.FaExternalLinkAlt, { size: 16 }),
                       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "hidden sm:inline", children: "Open in new tab" })

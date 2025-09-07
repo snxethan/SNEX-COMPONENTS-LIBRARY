@@ -236,7 +236,7 @@ var useExternalLink = () => {
 import { useEffect as useEffect3, useState as useState3 } from "react";
 import { X, Loader2 } from "lucide-react";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import ReactDOM from "react-dom";
+import { createPortal as createPortal2 } from "react-dom";
 import { Fragment as Fragment2, jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
 var isPdfSupported = () => {
   const ua = navigator.userAgent.toLowerCase();
@@ -275,7 +275,7 @@ var PDFModalViewer = ({ pdfUrl, onClose }) => {
     }, 300);
   };
   if (!pdfUrl || !isVisible) return null;
-  return ReactDOM.createPortal(
+  return createPortal2(
     /* @__PURE__ */ jsx3(
       "div",
       {
@@ -295,7 +295,7 @@ var PDFModalViewer = ({ pdfUrl, onClose }) => {
                   {
                     onClick: () => window.open(pdfUrl || "", "_blank"),
                     className: "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all",
-                    "aria-label": "Download or open in new tab",
+                    "aria-label": "Open in new tab",
                     children: [
                       /* @__PURE__ */ jsx3(FaExternalLinkAlt, { size: 16 }),
                       /* @__PURE__ */ jsx3("span", { className: "hidden sm:inline", children: "Open in new tab" })
@@ -457,12 +457,7 @@ function SecurityPolicyModal({ onClose }) {
 }
 
 // src/components/ToolTipWrapper.tsx
-import {
-  useState as useState5,
-  useRef,
-  useMemo,
-  useCallback
-} from "react";
+import { useState as useState5, useRef, useMemo, useCallback } from "react";
 import { Loader2 as Loader22 } from "lucide-react";
 import { Fragment as Fragment3, jsx as jsx5, jsxs as jsxs5 } from "react/jsx-runtime";
 var TooltipWrapper = ({ label, children, url, fullWidth = false }) => {

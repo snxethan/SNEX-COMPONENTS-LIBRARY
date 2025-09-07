@@ -1,5 +1,5 @@
 import * as react from 'react';
-import react__default, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import * as react_jsx_runtime from 'react/jsx-runtime';
 
 interface Props {
@@ -23,7 +23,7 @@ interface PDFModalViewerProps {
     pdfUrl: string | null;
     onClose: () => void;
 }
-declare const PDFModalViewer: react__default.FC<PDFModalViewerProps>;
+declare const PDFModalViewer: React.FC<PDFModalViewerProps>;
 
 interface SecurityPolicyModalProps {
     onClose: () => void;
