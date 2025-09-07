@@ -30,4 +30,14 @@
     animation: elastic-out 250ms cubic-bezier(.2, .8, .2, 1);
   }
 }
+@layer components {
+  .footer-links {
+    @apply flex flex-col sm:flex-row items-center gap-2;
+  }
+}
+@media (max-height: 124px) {
+  .footer-links {
+    flex-direction: column;
+  }
+}
 /*# sourceMappingURL=index.css.map */

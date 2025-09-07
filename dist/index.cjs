@@ -654,7 +654,7 @@ var TooltipWrapper = ({
           {
             role: "tooltip",
             "aria-label": label,
-            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[60] w-[240px] max-w-[90vw]\r\n                         rounded-md border border-[#333] bg-[#1a1a1a] p-2 shadow-xl transition-all\r\n                         duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
+            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[60] w-[240px] max-w-[90vw]\n                         rounded-md border border-[#333] bg-[#1a1a1a] p-2 shadow-xl transition-all\n                         duration-200 ease-out opacity-100 scale-100 animate-elastic-in",
             children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "flex flex-col items-center", children: [
               /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "mb-1 text-xs font-medium text-white", children: label }),
               /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "relative w-full h-[260px] overflow-hidden rounded bg-[#111]", children: [
@@ -681,7 +681,7 @@ var TooltipWrapper = ({
           {
             role: "tooltip",
             "aria-label": label,
-            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[60]\r\n                         whitespace-nowrap rounded-md bg-red-600 px-2 py-1 text-xs text-white shadow-md\r\n                         transition-all duration-200 ease-out opacity-100 scale-100 animate-zoom-rotate",
+            className: "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[60]\n                         whitespace-nowrap rounded-md bg-red-600 px-2 py-1 text-xs text-white shadow-md\n                         transition-all duration-200 ease-out opacity-100 scale-100 animate-zoom-rotate",
             children: label
           }
         ) })
