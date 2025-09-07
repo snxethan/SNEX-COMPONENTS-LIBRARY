@@ -506,6 +506,13 @@ var ExternalLinkHandler = ({ children }) => {
     }
   );
 };
+var useExternalLink = () => {
+  const context = useContext(ExternalLinkContext);
+  if (!context) {
+    throw new Error("useExternalLink must be used within an ExternalLinkHandler");
+  }
+  return context;
+};
 
 // src/PDFModalViewer.tsx
 import { useEffect as useEffect5, useState as useState6 } from "react";
@@ -617,5 +624,6 @@ export {
   Footer_default as Footer,
   PDFModalViewer_default as PDFModalViewer,
   SecurityPolicyModal,
-  ToolTipWrapper_default as TooltipWrapper
+  ToolTipWrapper_default as TooltipWrapper,
+  useExternalLink
 };

@@ -34,7 +34,8 @@ __export(index_exports, {
   Footer: () => Footer_default,
   PDFModalViewer: () => PDFModalViewer_default,
   SecurityPolicyModal: () => SecurityPolicyModal,
-  TooltipWrapper: () => ToolTipWrapper_default
+  TooltipWrapper: () => ToolTipWrapper_default,
+  useExternalLink: () => useExternalLink
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -536,6 +537,13 @@ var ExternalLinkHandler = ({ children }) => {
     }
   );
 };
+var useExternalLink = () => {
+  const context = (0, import_react5.useContext)(ExternalLinkContext);
+  if (!context) {
+    throw new Error("useExternalLink must be used within an ExternalLinkHandler");
+  }
+  return context;
+};
 
 // src/PDFModalViewer.tsx
 var import_react6 = require("react");
@@ -648,5 +656,6 @@ var PDFModalViewer_default = PDFModalViewer;
   Footer,
   PDFModalViewer,
   SecurityPolicyModal,
-  TooltipWrapper
+  TooltipWrapper,
+  useExternalLink
 });

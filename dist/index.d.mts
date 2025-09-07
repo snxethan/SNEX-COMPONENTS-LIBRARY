@@ -4,9 +4,17 @@ import react__default, { ReactNode } from 'react';
 
 declare const Footer: () => react_jsx_runtime.JSX.Element;
 
+interface ExternalLinkContextType {
+    showWarning: boolean;
+    targetUrl: string;
+    isProfessional: boolean;
+    handleExternalClick: (url: string, isProfessional?: boolean) => void;
+    closeWarning: () => void;
+}
 declare const ExternalLinkHandler: ({ children }: {
     children: ReactNode;
 }) => react_jsx_runtime.JSX.Element;
+declare const useExternalLink: () => ExternalLinkContextType;
 
 interface PdfThumbnailTooltipProps {
     label: string;
@@ -32,4 +40,4 @@ interface SecurityPolicyModalProps {
 }
 declare function SecurityPolicyModal({ onClose }: SecurityPolicyModalProps): react_jsx_runtime.JSX.Element;
 
-export { ContactFormModal, ExternalLinkHandler, Footer, PDFModalViewer, SecurityPolicyModal, TooltipWrapper };
+export { ContactFormModal, ExternalLinkHandler, Footer, PDFModalViewer, SecurityPolicyModal, TooltipWrapper, useExternalLink };
