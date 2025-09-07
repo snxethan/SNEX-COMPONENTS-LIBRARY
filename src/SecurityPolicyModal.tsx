@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 import ContactFormModal from "./ContactFormModal"
 import { FaShieldAlt, FaUserShield, FaLink, FaCookie } from "react-icons/fa"
 import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock"
@@ -12,8 +13,10 @@ interface SecurityPolicyModalProps {
 export default function SecurityPolicyModal({ onClose }: SecurityPolicyModalProps) {
   const [showContact, setShowContact] = useState(false)
   const [isAnimatingOut, setIsAnimatingOut] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     lockBodyScroll()
     return () => {
       unlockBodyScroll()
@@ -27,7 +30,7 @@ export default function SecurityPolicyModal({ onClose }: SecurityPolicyModalProp
     }, 300) // match animation duration
   }
 
-return (
+  const modalContent = (
     <div 
       className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in"
       onClick={(e) => {
@@ -142,4 +145,10 @@ return (
       {showContact && <ContactFormModal onClose={() => setShowContact(false)} />}
     </div>
   )
+
+  // Only render if mounted (client-side) to avoid hydration issues
+  if (!mounted) return null
+
+  // Use portal to render the modal at the document root level
+  return createPortal(modalContent, document.body)
 }

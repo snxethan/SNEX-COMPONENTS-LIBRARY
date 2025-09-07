@@ -1,13 +1,16 @@
 "use client";
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import ContactFormModal from "./ContactFormModal";
 import { FaShieldAlt, FaUserShield, FaLink, FaCookie } from "react-icons/fa";
 import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock";
 export default function SecurityPolicyModal({ onClose }) {
     const [showContact, setShowContact] = useState(false);
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+    const [mounted, setMounted] = useState(false);
     useEffect(() => {
+        setMounted(true);
         lockBodyScroll();
         return () => {
             unlockBodyScroll();
@@ -19,8 +22,13 @@ export default function SecurityPolicyModal({ onClose }) {
             onClose();
         }, 300); // match animation duration
     };
-    return (_jsxs("div", { className: "fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in", onClick: (e) => {
+    const modalContent = (_jsxs("div", { className: "fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in", onClick: (e) => {
             if (e.target === e.currentTarget)
                 handleClose();
         }, children: [_jsxs("div", { className: `bg-[#222222] rounded-xl border border-[#333333] shadow-lg p-8 relative max-w-4xl w-full max-h-[90vh] overflow-y-auto ${isAnimatingOut ? "animate-elastic-out" : "animate-elastic-in"}`, onClick: (e) => e.stopPropagation(), children: [_jsx("button", { onClick: handleClose, className: "absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl transition-colors", "aria-label": "Close", children: "\u00D7" }), _jsxs("h1", { className: "text-3xl font-bold text-white mb-8 relative text-center", children: ["Security Policy", _jsx("span", { className: "absolute bottom-[-8px] left-0 w-full h-1 bg-gradient-to-r from-red-600 to-red-500" })] }), _jsxs("div", { className: "space-y-8", children: [_jsxs("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [_jsxs("div", { className: "flex items-center gap-3 mb-4", children: [_jsx(FaShieldAlt, { className: "text-red-500 text-xl" }), _jsx("h2", { className: "text-xl font-semibold text-white", children: "Reporting Security Issues" })] }), _jsxs("div", { className: "text-gray-300", children: [_jsx("p", { className: "mb-4", children: "If you discover a security vulnerability or have concerns about the website's security, please get in touch immediately. All reports will be investigated promptly." }), _jsx("div", { className: "flex justify-center", children: _jsx("button", { onClick: () => setShowContact(true), className: "inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-lg gap-2 transition-all duration-200 ease-out hover:scale-105 active:scale-95", children: "Contact Me" }) })] })] }), _jsxs("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [_jsxs("div", { className: "flex items-center gap-3 mb-4", children: [_jsx(FaUserShield, { className: "text-red-500 text-xl" }), _jsx("h2", { className: "text-xl font-semibold text-white", children: "Data Protection" })] }), _jsxs("div", { className: "text-gray-300 space-y-2", children: [_jsx("p", { children: "This website prioritizes your privacy and data protection:" }), _jsxs("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [_jsx("li", { children: "No personal information is collected or stored" }), _jsx("li", { children: "Analytics are anonymized for performance monitoring only" }), _jsx("li", { children: "No tracking cookies are used without explicit consent" }), _jsx("li", { children: "Data is transmitted securely using HTTPS" })] })] })] }), _jsxs("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [_jsxs("div", { className: "flex items-center gap-3 mb-4", children: [_jsx(FaLink, { className: "text-red-500 text-xl" }), _jsx("h2", { className: "text-xl font-semibold text-white", children: "External Links" })] }), _jsxs("div", { className: "text-gray-300 space-y-2", children: [_jsx("p", { children: "This website includes links to external websites and resources:" }), _jsxs("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [_jsx("li", { children: "All external links are clearly marked" }), _jsx("li", { children: "Users are notified before leaving the site" }), _jsx("li", { children: "Third-party content is reviewed for safety" }), _jsx("li", { children: "I am not responsible for external website content" })] })] })] }), _jsxs("section", { className: "bg-[#1e1e1e] p-6 rounded-xl border border-[#333333] hover:border-red-600/50 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95", children: [_jsxs("div", { className: "flex items-center gap-3 mb-4", children: [_jsx(FaCookie, { className: "text-red-500 text-xl" }), _jsx("h2", { className: "text-xl font-semibold text-white", children: "Cookie Policy" })] }), _jsxs("div", { className: "text-gray-300 space-y-2", children: [_jsx("p", { children: "This website uses cookies responsibly:" }), _jsxs("ul", { className: "list-disc list-inside space-y-1 ml-4", children: [_jsx("li", { children: "Essential cookies for basic functionality only" }), _jsx("li", { children: "No tracking or analytics cookies without consent" }), _jsx("li", { children: "Session cookies are removed when you close your browser" }), _jsx("li", { children: "You can disable cookies in your browser settings" })] })] })] })] })] }), showContact && _jsx(ContactFormModal, { onClose: () => setShowContact(false) })] }));
+    // Only render if mounted (client-side) to avoid hydration issues
+    if (!mounted)
+        return null;
+    // Use portal to render the modal at the document root level
+    return createPortal(modalContent, document.body);
 }

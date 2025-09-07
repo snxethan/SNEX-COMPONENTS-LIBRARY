@@ -18,7 +18,9 @@ const PDFModalViewer = ({ pdfUrl, onClose }) => {
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
     const [isUnsupported, setIsUnsupported] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [mounted, setMounted] = useState(false);
     useEffect(() => {
+        setMounted(true);
         if (pdfUrl) {
             setIsVisible(true);
             setIsUnsupported(!isPdfSupported());
@@ -42,7 +44,7 @@ const PDFModalViewer = ({ pdfUrl, onClose }) => {
             onClose();
         }, 300);
     };
-    if (!pdfUrl || !isVisible)
+    if (!pdfUrl || !isVisible || !mounted)
         return null;
     return ReactDOM.createPortal(_jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-16", onClick: (e) => {
             if (e.target === e.currentTarget)

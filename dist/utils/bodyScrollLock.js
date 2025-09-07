@@ -5,6 +5,9 @@
 let lockCount = 0;
 let originalBodyOverflow = null;
 export const lockBodyScroll = () => {
+    // Check if document is available (SSR safety)
+    if (typeof document === 'undefined')
+        return;
     if (lockCount === 0) {
         // Store original overflow style only on first lock
         originalBodyOverflow = document.body.style.overflow || '';
@@ -13,6 +16,9 @@ export const lockBodyScroll = () => {
     lockCount++;
 };
 export const unlockBodyScroll = () => {
+    // Check if document is available (SSR safety)
+    if (typeof document === 'undefined')
+        return;
     lockCount = Math.max(0, lockCount - 1);
     if (lockCount === 0) {
         // Only restore scroll when all locks are released
@@ -26,6 +32,9 @@ export const unlockBodyScroll = () => {
  * Force unlock body scroll (use with caution, typically for cleanup)
  */
 export const forceUnlockBodyScroll = () => {
+    // Check if document is available (SSR safety)
+    if (typeof document === 'undefined')
+        return;
     lockCount = 0;
     if (originalBodyOverflow !== null) {
         document.body.style.overflow = originalBodyOverflow;

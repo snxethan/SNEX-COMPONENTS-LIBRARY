@@ -26,8 +26,11 @@ const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
   const [isAnimatingOut, setIsAnimatingOut] = useState(false)
   const [isUnsupported, setIsUnsupported] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+    
     if (pdfUrl) {
       setIsVisible(true)
       setIsUnsupported(!isPdfSupported())
@@ -56,7 +59,7 @@ const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
     }, 300)
   }
 
-  if (!pdfUrl || !isVisible) return null
+  if (!pdfUrl || !isVisible || !mounted) return null
 
   return ReactDOM.createPortal(
  <div
