@@ -9,6 +9,7 @@ export default defineConfig({
   external: [
     'react',
     'react-dom',
+    'react/jsx-runtime',
     'tailwindcss',
     'next','next/image','next/link',
     'postcss',
