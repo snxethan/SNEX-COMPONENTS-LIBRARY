@@ -24,6 +24,7 @@ const TooltipWrapper = ({
   const timeoutRef = useRef<number | null>(null);
   const isHovering = useRef(false);
 
+
   const isPdf = useMemo(() => url?.toLowerCase().endsWith(".pdf") ?? false, [url]);
 
   const openWithDelay = useCallback(() => {
