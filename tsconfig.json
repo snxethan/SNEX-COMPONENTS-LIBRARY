@@ -8,7 +8,8 @@
     "skipLibCheck": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "types": ["node", "react"]
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true
   },
-  "include": ["src"]
+  "include": ["src", "node_modules/@snxethan/snex-components/src"]
 }
