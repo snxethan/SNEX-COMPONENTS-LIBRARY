@@ -13,14 +13,14 @@ To use these components in your project, you need to import the required globals
 
 ```css
 /* In your main CSS file (e.g., globals.css or app.css) */
-@import '@snxethan/snex-components/src/globals.css';
+@import '@snxethan/snex-components/globals.css';
 ```
 
 Or import it in your main component file:
 
 ```javascript
 // In your main component or _app.js/_app.tsx
-import '@snxethan/snex-components/src/globals.css';
+import '@snxethan/snex-components/globals.css';
 ```
 
 Then import and use the components:

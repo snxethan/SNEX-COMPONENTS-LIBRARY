@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"
 import { X, Download, Loader2, ExternalLinkIcon } from "lucide-react"
 import { FaExternalLinkAlt } from "react-icons/fa";
 import ReactDOM from "react-dom"
+import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock"
 
 interface PDFModalViewerProps {
   pdfUrl: string | null
@@ -31,8 +32,7 @@ const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
       setIsVisible(true)
       setIsUnsupported(!isPdfSupported())
 
-      const originalOverflow = document.body.style.overflow
-      document.body.style.overflow = "hidden"
+      lockBodyScroll()
 
       const handleEscKey = (e: KeyboardEvent) => {
         if (e.key === "Escape") initiateClose()
@@ -41,7 +41,7 @@ const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
       window.addEventListener("keydown", handleEscKey)
 
       return () => {
-        document.body.style.overflow = originalOverflow
+        unlockBodyScroll()
         window.removeEventListener("keydown", handleEscKey)
       }
     }

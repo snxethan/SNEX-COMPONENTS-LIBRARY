@@ -3,6 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import toast from 'react-hot-toast';
+import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock";
 export default function ContactFormModal({ onClose }) {
     const [isAnimatingOut, setIsAnimatingOut] = useState(false); // State to control the animation of the modal 
     const [name, setName] = useState(""); // State to store the name input
@@ -37,11 +38,13 @@ export default function ContactFormModal({ onClose }) {
         }
     };
     useEffect(() => {
-        // Add a class to the body to prevent scrolling when the modal is open
-        // This is done to prevent the background from scrolling when the modal is open
+        // Lock body scroll when modal is mounted
         setMounted(true);
-        document.body.classList.add("overflow-hidden"); // Prevent scrolling
-        return () => document.body.classList.remove("overflow-hidden"); // Remove the class when the modal is closed
+        lockBodyScroll();
+        return () => {
+            // Unlock body scroll when modal is unmounted
+            unlockBodyScroll();
+        };
     }, []);
     const close = () => {
         // Close the modal and remove the class from the body

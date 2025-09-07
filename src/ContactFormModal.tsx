@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import toast from 'react-hot-toast'
+import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock"
 
 // This component is used to display a contact form modal. It allows users to send messages to the developer.
 // The modal can be closed by clicking outside of it or by clicking the close button.
@@ -48,11 +49,14 @@ export default function ContactFormModal({ onClose }: Props) {
   }
 
   useEffect(() => {
-    // Add a class to the body to prevent scrolling when the modal is open
-    // This is done to prevent the background from scrolling when the modal is open
+    // Lock body scroll when modal is mounted
     setMounted(true)
-    document.body.classList.add("overflow-hidden") // Prevent scrolling
-    return () => document.body.classList.remove("overflow-hidden") // Remove the class when the modal is closed
+    lockBodyScroll()
+    
+    return () => {
+      // Unlock body scroll when modal is unmounted
+      unlockBodyScroll()
+    }
   }, [])
 
   const close = () => {

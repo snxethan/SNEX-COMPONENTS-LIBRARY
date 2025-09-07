@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import ContactFormModal from "./ContactFormModal"
 import { FaShieldAlt, FaUserShield, FaLink, FaCookie } from "react-icons/fa"
+import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock"
 
 interface SecurityPolicyModalProps {
   onClose: () => void
@@ -13,9 +14,9 @@ export default function SecurityPolicyModal({ onClose }: SecurityPolicyModalProp
   const [isAnimatingOut, setIsAnimatingOut] = useState(false)
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden'
+    lockBodyScroll()
     return () => {
-      document.body.style.overflow = 'unset'
+      unlockBodyScroll()
     }
   }, [])
 

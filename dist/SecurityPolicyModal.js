@@ -3,13 +3,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
 import ContactFormModal from "./ContactFormModal";
 import { FaShieldAlt, FaUserShield, FaLink, FaCookie } from "react-icons/fa";
+import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock";
 export default function SecurityPolicyModal({ onClose }) {
     const [showContact, setShowContact] = useState(false);
     const [isAnimatingOut, setIsAnimatingOut] = useState(false);
     useEffect(() => {
-        document.body.style.overflow = 'hidden';
+        lockBodyScroll();
         return () => {
-            document.body.style.overflow = 'unset';
+            unlockBodyScroll();
         };
     }, []);
     const handleClose = () => {

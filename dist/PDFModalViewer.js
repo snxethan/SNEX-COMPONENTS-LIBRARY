@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { X, Loader2 } from "lucide-react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import ReactDOM from "react-dom";
+import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock";
 const isPdfSupported = () => {
     const ua = navigator.userAgent.toLowerCase();
     const isIOS = /iphone|ipad|ipod/.test(ua);
@@ -21,15 +22,14 @@ const PDFModalViewer = ({ pdfUrl, onClose }) => {
         if (pdfUrl) {
             setIsVisible(true);
             setIsUnsupported(!isPdfSupported());
-            const originalOverflow = document.body.style.overflow;
-            document.body.style.overflow = "hidden";
+            lockBodyScroll();
             const handleEscKey = (e) => {
                 if (e.key === "Escape")
                     initiateClose();
             };
             window.addEventListener("keydown", handleEscKey);
             return () => {
-                document.body.style.overflow = originalOverflow;
+                unlockBodyScroll();
                 window.removeEventListener("keydown", handleEscKey);
             };
         }

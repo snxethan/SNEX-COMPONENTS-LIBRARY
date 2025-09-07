@@ -1,6 +1,7 @@
 "use client";
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { createContext, useContext, useState, useEffect, } from "react";
+import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock";
 const ExternalLinkContext = createContext(undefined);
 export const ExternalLinkHandler = ({ children }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -23,13 +24,15 @@ export const ExternalLinkHandler = ({ children }) => {
     };
     useEffect(() => {
         if (isVisible) {
-            document.body.classList.add("overflow-hidden");
+            lockBodyScroll();
         }
         else {
-            document.body.classList.remove("overflow-hidden");
+            unlockBodyScroll();
         }
         return () => {
-            document.body.classList.remove("overflow-hidden");
+            if (isVisible) {
+                unlockBodyScroll();
+            }
         };
     }, [isVisible]);
     return (_jsxs(ExternalLinkContext.Provider, { value: {

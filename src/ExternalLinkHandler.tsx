@@ -7,6 +7,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react"
+import { lockBodyScroll, unlockBodyScroll } from "./utils/bodyScrollLock"
 
 interface ExternalLinkContextType {
   showWarning: boolean
@@ -44,13 +45,15 @@ export const ExternalLinkHandler = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isVisible) {
-      document.body.classList.add("overflow-hidden")
+      lockBodyScroll()
     } else {
-      document.body.classList.remove("overflow-hidden")
+      unlockBodyScroll()
     }
 
     return () => {
-      document.body.classList.remove("overflow-hidden")
+      if (isVisible) {
+        unlockBodyScroll()
+      }
     }
   }, [isVisible])
 
