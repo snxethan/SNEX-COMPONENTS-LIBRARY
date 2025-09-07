@@ -114,12 +114,7 @@ function ContactFormModal({ onClose }) {
 }
 
 // src/components/ExternalLinkHandler.tsx
-import {
-  createContext,
-  useContext,
-  useState as useState2,
-  useEffect as useEffect2
-} from "react";
+import { useState as useState2, useEffect as useEffect2, createContext, useContext } from "react";
 import { Fragment, jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
 var ExternalLinkContext = createContext(
   void 0
