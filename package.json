@@ -1,13 +1,14 @@
 {
   "name": "@snxethan/snex-components",
   "version": "1.0.0",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "src"
+    "dist",
+    "globals.css"
   ],
   "scripts": {
-    "build": "echo 'No build needed for Next.js projects'"
+    "build": "tsc"
   },
   "dependencies": {
     "lucide-react": "^0.542.0",

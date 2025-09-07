@@ -1,7 +1,5 @@
 "use client"
 import React, { useState, useEffect } from "react"
-import Image from "next/image"
-import Link from "next/link"
 import TooltipWrapper from "./ToolTipWrapper"
 import SecurityPolicyModal from "./SecurityPolicyModal"
 
@@ -63,12 +61,13 @@ const Footer = () => {
 
           {/* Center: Logo & Name */}
           <div className="order-1 lg:order-2 flex items-center gap-2">
-            <Image
+            <img
               src="/images/avatar/snex.png"
               alt="Ethan Townsend"
               width={32}
               height={32}
               className="rounded-full"
+              style={{ display: 'block' }}
             />
             <TooltipWrapper label="Social Page">
               <a href="https://ethantownsend.dev" className="text-sm text-gray-400 hover:text-red-600 transition-colors duration-200">
@@ -82,19 +81,19 @@ const Footer = () => {
             <div className="footer-links flex flex-col sm:flex-row items-center gap-2">
               <TooltipWrapper label="Portfolio">
                 <div className="flex gap-4">
-                  <Link href="https://snex.dev" className="hover:text-red-600 transition-colors duration-200">
+                  <a href="https://snex.dev" className="hover:text-red-600 transition-colors duration-200">
                     snex.dev    
-                  </Link>
-                  <Link href="https://snxethan.dev" className="hover:text-red-600 transition-colors duration-200">
+                  </a>
+                  <a href="https://snxethan.dev" className="hover:text-red-600 transition-colors duration-200">
                     snxethan.dev
-                  </Link>
+                  </a>
                 </div>
               </TooltipWrapper>
               <span className="hidden sm:block text-gray-600">|</span>
               <TooltipWrapper label="Social Page">
-                <Link href="https://ethantownsend.dev" className="hover:text-red-600 transition-colors duration-200">
+                <a href="https://ethantownsend.dev" className="hover:text-red-600 transition-colors duration-200">
                   ethantownsend.dev
-                </Link>
+                </a>
               </TooltipWrapper>
             </div>
           </div>
