@@ -41,11 +41,12 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./dist/index.css": "./dist/index.css",
     "./tailwind-preset": "./tailwind-preset.cjs",
     "./styles.css": "./styles.css"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup",
     "postinstall": "node -e \"console.log('[snex-components] Add our preset + content (TW v3) or @source (TW v4). See README.')\""
   }
 }

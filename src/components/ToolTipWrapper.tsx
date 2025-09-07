@@ -16,7 +16,7 @@ const TooltipWrapper = ({ label, children, url, fullWidth = false }: PdfThumbnai
   const [thumbnailLoading, setThumbnailLoading] = useState(false)
   const [thumbnailError, setThumbnailError] = useState(false)
 
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<number | null>(null)
   const isHovering = useRef(false)
 
   const isPdf = useMemo(() => url?.toLowerCase().endsWith(".pdf") ?? false, [url])
