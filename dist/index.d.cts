@@ -38,4 +38,16 @@ interface PdfThumbnailTooltipProps {
 }
 declare const TooltipWrapper: ({ label, children, url, fullWidth }: PdfThumbnailTooltipProps) => react_jsx_runtime.JSX.Element;
 
-export { ContactFormModal, ExternalLinkHandler, PDFModalViewer, SecurityPolicyModal, TooltipWrapper, useExternalLink };
+type FooterProps = {
+    avatarSrc?: string;
+    name?: string;
+    socialHref?: string;
+    leftLabel?: string;
+    links?: {
+        label: string;
+        href: string;
+    }[];
+};
+declare const Footer: ({ avatarSrc, name, socialHref, leftLabel, links }: FooterProps) => react_jsx_runtime.JSX.Element;
+
+export { ContactFormModal, ExternalLinkHandler, Footer, PDFModalViewer, SecurityPolicyModal, TooltipWrapper, useExternalLink };
