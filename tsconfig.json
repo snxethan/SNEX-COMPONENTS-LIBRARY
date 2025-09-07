@@ -9,11 +9,17 @@
     "allowJs": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
+
     "declaration": true,
+    "declarationDir": "dist/types", 
     "emitDeclarationOnly": false,
+
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+
+    "isolatedModules": true,  
+    "forceConsistentCasingInFileNames": true
   },
- "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css"],
   "exclude": ["node_modules", "dist"]
 }
