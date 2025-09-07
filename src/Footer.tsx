@@ -99,24 +99,27 @@ const Footer = () => {
           padding: 1.5rem;
         }
         .footer-container {
-          max-width: 90rem;
+          max-width: 96rem; /* same as Tailwind's max-w-8xl */
           margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          align-items: center;
         }
         .footer-row {
           width: 100%;
           display: flex;
           flex-direction: column;
-          gap: 1rem;
-          align-items: center;
+          gap: 1rem; /* same as gap-4 */
           text-align: center;
           font-size: 0.875rem;
+          align-items: center;
         }
         @media (min-width: 1024px) {
           .footer-row {
             flex-direction: row;
             justify-content: space-between;
             text-align: left;
-            align-items: center;
           }
         }
         .footer-left,
@@ -126,10 +129,8 @@ const Footer = () => {
           align-items: center;
         }
 
-        /* Center alignment */
         .footer-center {
-          gap: 0.5rem;
-          justify-content: center;
+          gap: 0.5rem; /* gap-2 */
         }
         .footer-center a.name-link {
           display: inline-flex;
@@ -137,27 +138,25 @@ const Footer = () => {
           line-height: 1;
         }
 
-        /* Right section (tightened spacing) */
         .footer-right {
           flex-direction: column;
-          gap: 0.5rem;
+          gap: 0.5rem; /* gap-2 */
         }
         @media (min-width: 640px) {
           .footer-right {
             flex-direction: row;
-            gap: 0.5rem; /* keep it tight */
           }
         }
         .footer-links {
           display: flex;
           flex-direction: row;
-          gap: 0.5rem; /* less spacing than before */
+          gap: 0.5rem; /* sm:flex-row gap-2 */
           align-items: center;
           justify-content: center;
         }
         .domain-links {
           display: flex;
-          gap: 0.5rem;
+          gap: 1rem; /* flex gap-4 */
         }
         .divider {
           display: none;
@@ -169,7 +168,6 @@ const Footer = () => {
           }
         }
 
-        /* Links */
         .footer-link-button {
           font-size: 0.875rem;
           color: #9ca3af;
@@ -183,7 +181,6 @@ const Footer = () => {
           color: #dc2626;
         }
 
-        /* Avatar */
         .avatar {
           border-radius: 50%;
           display: inline-block;
@@ -192,7 +189,6 @@ const Footer = () => {
           object-fit: cover;
         }
 
-        /* Skeleton loading states */
         .skeleton {
           background: #333;
           border-radius: 0.25rem;
