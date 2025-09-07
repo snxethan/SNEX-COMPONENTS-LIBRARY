@@ -60,7 +60,7 @@ const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
 
   return ReactDOM.createPortal(
  <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-16"
+      className="fixed inset-0 z-[90] flex items-center justify-center bg-black/60 backdrop-blur-sm p-16"
       onClick={(e) => {
         if (e.target === e.currentTarget) initiateClose()
       }}
@@ -106,7 +106,7 @@ const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
               )}
               <iframe
                 src={pdfUrl}
-              className="w-full min-h-[600px] h-[calc(100vh-150px)] max-h-[75vh] border-none"
+                className="w-full h-full min-h-[500px] border-none"
                 onLoad={() => setIsLoading(false)}
                 loading="lazy"
               />
