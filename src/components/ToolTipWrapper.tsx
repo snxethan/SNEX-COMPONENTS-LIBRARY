@@ -1,132 +1,371 @@
 "use client";
 
-import { useState, useRef, useMemo, useCallback, type ReactNode, useEffect } from "react";
+import {
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+  useEffect,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
 import { Loader2 } from "lucide-react";
+import { isPdfPreviewSupported } from "../utils/pdfSupport";
+import { useSnexImage } from "../context/UIProvider";
 
 interface PdfThumbnailTooltipProps {
   label: string;
   children: ReactNode;
   url?: string;
+  imageUrl?: string;
   fullWidth?: boolean;
 }
+
+const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".svg"];
+const TOOLTIP_ANIMATION_MS = 300;
+
+const getUrlPathname = (value?: string) => {
+  if (!value) return "";
+
+  try {
+    return new URL(
+      value,
+      typeof window !== "undefined" ? window.location.origin : "http://localhost"
+    ).pathname;
+  } catch {
+    return value.split("?")[0]?.split("#")[0] ?? value;
+  }
+};
 
 const TooltipWrapper = ({
   label,
   children,
   url,
+  imageUrl,
   fullWidth = false,
 }: PdfThumbnailTooltipProps) => {
+  const Image = useSnexImage();
+
   const [visible, setVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [thumbnailLoading, setThumbnailLoading] = useState(false);
   const [thumbnailError, setThumbnailError] = useState(false);
+  const [isLargeViewport, setIsLargeViewport] = useState(false);
+  const [popupPosition, setPopupPosition] = useState<{ left: number; top: number } | null>(null);
 
-  // Use number for browser timers (avoids NodeJS.Timeout typing issues in ESM bundlers)
-  const timeoutRef = useRef<number | null>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  // Browser timer ids, not NodeJS.Timeout - this package has no @types/node.
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHovering = useRef(false);
 
+  const normalizedPath = useMemo(() => getUrlPathname(url).toLowerCase(), [url]);
+  const isPdf = useMemo(
+    () => normalizedPath.endsWith(".pdf") || url?.startsWith("blob:") || false,
+    [normalizedPath, url]
+  );
+  const isImage = useMemo(
+    () => !!imageUrl || IMAGE_EXTENSIONS.some((ext) => normalizedPath.endsWith(ext)),
+    [normalizedPath, imageUrl]
+  );
+  // Prefer explicit imageUrl, fall back to url if it's an image extension
+  const resolvedImageUrl = imageUrl ?? (isImage && !isPdf ? url : undefined);
 
-  const isPdf = useMemo(() => url?.toLowerCase().endsWith(".pdf") ?? false, [url]);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-  const openWithDelay = useCallback(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const updateViewportState = () => setIsLargeViewport(mediaQuery.matches);
+
+    updateViewportState();
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", updateViewportState);
+      return () => mediaQuery.removeEventListener("change", updateViewportState);
+    }
+
+    mediaQuery.addListener(updateViewportState);
+    return () => mediaQuery.removeListener(updateViewportState);
+  }, []);
+
+  const canPreviewPdf = useMemo(
+    () => (isPdf ? isPdfPreviewSupported() && isLargeViewport : false),
+    [isPdf, isLargeViewport]
+  );
+
+  // Image previews work everywhere (no browser restriction), but still skip on mobile
+  const canPreviewImage = useMemo(
+    () => isImage && !isPdf && isLargeViewport && !!resolvedImageUrl,
+    [isImage, isPdf, isLargeViewport, resolvedImageUrl]
+  );
+
+  const shouldShowStandardTooltip = !isPdf && !isImage;
+  const shouldShowPortalTooltip = canPreviewPdf || canPreviewImage || shouldShowStandardTooltip;
+
+  const updatePopupPosition = useCallback(() => {
+    if (!triggerRef.current || !popupRef.current || typeof window === "undefined") return;
+
+    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const popupRect = popupRef.current.getBoundingClientRect();
+    const spacing = 8;
+    const viewportPadding = 8;
+
+    let left = triggerRect.left + triggerRect.width / 2 - popupRect.width / 2;
+    let top = triggerRect.top - popupRect.height - spacing;
+
+    if (left + popupRect.width > window.innerWidth - viewportPadding) {
+      left = window.innerWidth - popupRect.width - viewportPadding;
+    }
+
+    if (left < viewportPadding) {
+      left = viewportPadding;
+    }
+
+    if (top < viewportPadding) {
+      top = Math.min(
+        triggerRect.bottom + spacing,
+        window.innerHeight - popupRect.height - viewportPadding
+      );
+    }
+
+    if (top < viewportPadding) {
+      top = viewportPadding;
+    }
+
+    setPopupPosition({ left, top });
+  }, []);
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
     isHovering.current = true;
-    timeoutRef.current = window.setTimeout(() => {
+    clearCloseTimer();
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    if (visible) {
+      setIsClosing(false);
+      return;
+    }
+
+    timeoutRef.current = setTimeout(() => {
       if (!isHovering.current) return;
+
       setVisible(true);
-      if (isPdf) {
+      setIsClosing(false);
+
+      if (canPreviewPdf || canPreviewImage) {
         setThumbnailLoading(true);
         setThumbnailError(false);
       }
     }, 500);
-  }, [isPdf]);
+  }, [canPreviewPdf, canPreviewImage, clearCloseTimer, visible]);
 
-  const closeNow = useCallback(() => {
+  const handleMouseLeave = useCallback(() => {
     isHovering.current = false;
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    if (visible) {
+      setIsClosing(true);
+      setThumbnailLoading(false);
+      clearCloseTimer();
+      closeTimerRef.current = setTimeout(() => {
+        setVisible(false);
+        setIsClosing(false);
+        setPopupPosition(null);
+      }, TOOLTIP_ANIMATION_MS);
+      return;
     }
+
     setVisible(false);
+    setIsClosing(false);
     setThumbnailLoading(false);
+    setPopupPosition(null);
+  }, [clearCloseTimer, visible]);
+
+  useEffect(() => {
+    if (!shouldShowPortalTooltip || (!visible && !isClosing)) return;
+
+    updatePopupPosition();
+
+    const handleViewportChange = () => updatePopupPosition();
+
+    window.addEventListener("resize", handleViewportChange);
+    window.addEventListener("scroll", handleViewportChange, true);
+
+    return () => {
+      window.removeEventListener("resize", handleViewportChange);
+      window.removeEventListener("scroll", handleViewportChange, true);
+    };
+  }, [isClosing, shouldShowPortalTooltip, visible, updatePopupPosition]);
+
+  useEffect(() => {
+    if (!canPreviewPdf && !canPreviewImage && (isPdf || isImage)) {
+      clearCloseTimer();
+      setVisible(false);
+      setIsClosing(false);
+      setPopupPosition(null);
+      setThumbnailLoading(false);
+    }
+  }, [canPreviewPdf, canPreviewImage, isPdf, isImage, clearCloseTimer]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
   }, []);
 
-  // Cleanup on unmount
-  useEffect(() => () => closeNow(), [closeNow]);
+  const handleThumbnailLoad = useCallback(() => {
+    setThumbnailLoading(false);
+    updatePopupPosition();
+  }, [updatePopupPosition]);
 
-  const handleThumbnailLoad = () => setThumbnailLoading(false);
-  const handleThumbnailError = () => {
+  const handleThumbnailError = useCallback(() => {
     setThumbnailLoading(false);
     setThumbnailError(true);
-  };
+    updatePopupPosition();
+  }, [updatePopupPosition]);
 
-  return (
-    <span
-      className={`relative group ${fullWidth ? "w-full" : "inline-block"}`}
-      onMouseEnter={openWithDelay}
-      onMouseLeave={closeNow}
-      onFocus={openWithDelay}   // keyboard focus (e.g., when child is a link/button)
-      onBlur={closeNow}
-      onTouchStart={openWithDelay} // basic mobile support
-      onTouchEnd={closeNow}
-    >
-      {children}
+  const popupStyle = popupPosition
+    ? { left: popupPosition.left, top: popupPosition.top }
+    : { visibility: "hidden" as const, left: 0, top: 0 };
 
-      {visible && (
-        <>
-          {isPdf ? (
-            <div
-              role="tooltip"
-              aria-label={label}
-              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[60] w-[240px] max-w-[90vw]
-                         rounded-md border border-[#333] bg-[#1a1a1a] p-2 shadow-xl transition-all
-                         duration-200 ease-out opacity-100 scale-100 animate-elastic-in"
-            >
-              <div className="flex flex-col items-center">
-                <div className="mb-1 text-xs font-medium text-white">{label}</div>
-
-                <div className="relative w-full h-[260px] overflow-hidden rounded bg-[#111]">
-                  {thumbnailLoading && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#111]">
-                      <Loader2 className="h-6 w-6 animate-spin text-white/70" />
-                    </div>
-                  )}
-
-                  {thumbnailError ? (
-                    <div className="absolute inset-0 flex items-center justify-center p-2 text-center text-xs text-white/70">
-                      Unable to generate preview
-                    </div>
-                  ) : (
-                    <embed
-                      src={url}
-                      type="application/pdf"
-                      className="h-full w-full min-h-[260px]"
-                      onLoad={handleThumbnailLoad}
-                      onError={handleThumbnailError}
-                    />
-                  )}
-
-                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
-                    <div className="flex items-center justify-between text-xs text-white">
-                      <span className="max-w-[140px] truncate">PDF Document</span>
-                      <span className="text-white/70">Preview</span>
-                    </div>
+  const pdfTooltip =
+    canPreviewPdf && (visible || isClosing) && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            ref={popupRef}
+            role="tooltip"
+            aria-label={label}
+            className={`fixed z-[9999] w-[260px] max-w-[90vw] overflow-hidden rounded-xl border border-[#333333] bg-[#1e1e1e] shadow-2xl shadow-black/50 ${
+              isClosing ? "animate-fade-out-down" : "animate-fade-in-up"
+            }`}
+            style={popupStyle}
+          >
+            <div className="border-b border-[#333333] px-3 pb-1.5 pt-2">
+              <span className="text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
+                {label}
+              </span>
+            </div>
+            <div className="p-3 pt-2">
+              <div className="relative h-[260px] w-full overflow-hidden rounded-lg border border-[#333333] bg-[#111111]">
+                {thumbnailLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#111111]">
+                    <Loader2 className="h-6 w-6 animate-spin text-white/70" />
+                  </div>
+                )}
+                {thumbnailError ? (
+                  <div className="absolute inset-0 flex items-center justify-center px-3 text-center text-xs text-white/70">
+                    Unable to generate preview
+                  </div>
+                ) : (
+                  <embed
+                    src={url}
+                    type="application/pdf"
+                    className="h-full w-full min-h-[260px]"
+                    onLoad={handleThumbnailLoad}
+                    onError={handleThumbnailError}
+                  />
+                )}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                  <div className="flex items-center justify-between text-xs text-white">
+                    <span className="truncate max-w-[160px]">PDF Document</span>
+                    <span className="text-white/70">Preview</span>
                   </div>
                 </div>
               </div>
             </div>
-          ) : (
-            <div
-              role="tooltip"
-              aria-label={label}
-              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[60]
-                         whitespace-nowrap rounded-md bg-red-600 px-2 py-1 text-xs text-white shadow-md
-                         transition-all duration-200 ease-out opacity-100 scale-100 animate-zoom-rotate"
-            >
-              {label}
+          </div>,
+          document.body
+        )
+      : null;
+
+  const imageTooltip =
+    canPreviewImage && (visible || isClosing) && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            ref={popupRef}
+            role="tooltip"
+            aria-label={label}
+            className={`fixed z-[9999] w-[280px] max-w-[90vw] overflow-hidden rounded-xl border border-[#333333] bg-[#1e1e1e] shadow-2xl shadow-black/50 ${
+              isClosing ? "animate-fade-out-down" : "animate-fade-in-up"
+            }`}
+            style={popupStyle}
+          >
+            <div className="border-b border-[#333333] px-3 pb-1.5 pt-2">
+              <span className="text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
+                {label}
+              </span>
             </div>
-          )}
-        </>
-      )}
-    </span>
+            <div className="p-3 pt-2">
+              <div
+                className="relative w-full overflow-hidden rounded-lg border border-[#333333] bg-[#111111]"
+                style={{ minHeight: 160 }}
+              >
+                {thumbnailLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#111111]">
+                    <Loader2 className="h-6 w-6 animate-spin text-white/70" />
+                  </div>
+                )}
+                {thumbnailError ? (
+                  <div className="flex items-center justify-center px-3 py-8 text-center text-xs text-white/70">
+                    Unable to load image
+                  </div>
+                ) : (
+                  <Image
+                    src={resolvedImageUrl!}
+                    alt={label}
+                    width={254}
+                    height={180}
+                    className="w-full h-auto object-contain"
+                    onLoad={handleThumbnailLoad}
+                    onError={handleThumbnailError}
+                    unoptimized={resolvedImageUrl?.startsWith("http")}
+                  />
+                )}
+              </div>
+            </div>
+          </div>,
+          document.body
+        )
+      : null;
+
+  const standardTooltip =
+    shouldShowStandardTooltip && (visible || isClosing) && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            ref={popupRef}
+            role="tooltip"
+            aria-label={label}
+            className={`fixed z-[9999] pointer-events-none max-w-[90vw] rounded-md bg-red-600 px-2 py-1 text-xs text-white shadow-md ${
+              isClosing ? "animate-fade-out-down" : "animate-fade-in-up"
+            }`}
+            style={popupStyle}
+          >
+            <span className="whitespace-normal break-words">{label}</span>
+          </div>,
+          document.body
+        )
+      : null;
+
+  return (
+    <div
+      ref={triggerRef}
+      className={`relative group ${fullWidth ? "w-full" : "inline-block"}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {children}
+      {pdfTooltip}
+      {imageTooltip}
+      {standardTooltip}
+    </div>
   );
 };
 

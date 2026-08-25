@@ -1,169 +1,178 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { X, Loader2 } from "lucide-react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { createPortal } from "react-dom";
+import { isPdfPreviewSupported } from "../utils/pdfSupport";
+import { useSnexImage } from "../context/UIProvider";
 
 interface PDFModalViewerProps {
-  pdfUrl: string | null;
+  pdfUrl?: string | null;
+  imageUrl?: string | null;
+  imageAlt?: string;
+  /** Filename used when saving a blob: PDF, which carries no name of its own. */
+  downloadFileName?: string;
   onClose: () => void;
 }
 
-// Allow Safari on macOS, block iOS & most mobile for iframe previews
-const isPdfEmbedSupported = (): boolean => {
-  const ua = navigator.userAgent.toLowerCase();
-  const isIOS = /iphone|ipad|ipod/.test(ua);
-  const isMobile = /android|iphone|ipad|mobile/.test(ua);
-  const isSafari = /safari/.test(ua) && !/chrome|crios|fxios/.test(ua);
-  const isMac = /macintosh|mac os x/.test(ua);
-  // iOS: no; Android mobile: often flaky; Safari only allowed on macOS
-  return !(isIOS || (isSafari && !isMac) || (isMobile && !isSafari));
-};
+const PDFModalViewer: React.FC<PDFModalViewerProps> = ({
+  pdfUrl,
+  imageUrl,
+  imageAlt,
+  downloadFileName = "document.pdf",
+  onClose,
+}) => {
+  const Image = useSnexImage();
 
-const PDFModalViewer: React.FC<PDFModalViewerProps> = ({ pdfUrl, onClose }) => {
-  const [visible, setVisible] = useState(false);
-  const [animOut, setAnimOut] = useState(false);
-  const [unsupported, setUnsupported] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const lastOpenedPdfRef = useRef<string | null>(null);
 
-  const modalRef = useRef<HTMLDivElement | null>(null);
-  const openInNewTab = () => {
-    if (pdfUrl) window.open(pdfUrl, "_blank", "noopener,noreferrer");
-  };
+  const openInNewTab = useCallback((url: string) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  }, []);
 
-  // Build once per URL (reset loading state)
-  useEffect(() => {
-    if (!pdfUrl) return;
-    setVisible(true);
-    setUnsupported(!isPdfEmbedSupported());
-    setLoading(true);
-
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") initiateClose();
-      if (e.key === "Tab") {
-        // focus trap
-        const root = modalRef.current;
-        if (!root) return;
-        const focusables = root.querySelectorAll<HTMLElement>(
-          'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusables.length === 0) return;
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
+  const downloadPdf = useCallback(
+    (url: string) => {
+      if (url.startsWith("blob:")) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = downloadFileName;
+        link.rel = "noopener noreferrer";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        return;
       }
-    };
-    window.addEventListener("keydown", onKey);
 
-    // Focus the primary action after mount
-    setTimeout(() => {
-      modalRef.current?.querySelector<HTMLElement>("[data-focus-initial]")?.focus();
-    }, 0);
-
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [pdfUrl]);
-
-  const initiateClose = () => {
-    setAnimOut(true);
-    setTimeout(() => {
-      setAnimOut(false);
-      setVisible(false);
-      onClose();
-    }, 300);
-  };
-
-  const containerClasses = useMemo(
-    () =>
-      `fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-8`,
-    []
+      const parsedUrl = new URL(url, window.location.origin);
+      const downloadUrl = `${parsedUrl.pathname}${parsedUrl.search}${
+        parsedUrl.search ? "&" : "?"
+      }download=1`;
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = "";
+      link.rel = "noopener noreferrer";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    },
+    [downloadFileName]
   );
 
-  if (!pdfUrl || !visible) return null;
+  const initiateClose = useCallback(() => {
+    setIsAnimatingOut(true);
+    setTimeout(() => {
+      setIsAnimatingOut(false);
+      setIsVisible(false);
+      onClose();
+    }, 300);
+  }, [onClose]);
+
+  const activeUrl = pdfUrl ?? imageUrl ?? null;
+  const isImagePreview = Boolean(imageUrl && !pdfUrl);
+
+  useEffect(() => {
+    if (!activeUrl) {
+      lastOpenedPdfRef.current = null;
+      setIsVisible(false);
+      return;
+    }
+
+    if (pdfUrl && !isPdfPreviewSupported()) {
+      if (lastOpenedPdfRef.current !== pdfUrl) {
+        lastOpenedPdfRef.current = pdfUrl;
+        openInNewTab(pdfUrl);
+      }
+      onClose();
+      return;
+    }
+
+    setIsVisible(true);
+    setIsLoading(true);
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleEscKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") initiateClose();
+    };
+
+    window.addEventListener("keydown", handleEscKey);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleEscKey);
+    };
+  }, [activeUrl, pdfUrl, initiateClose, onClose, openInNewTab]);
+
+  if (!activeUrl || !isVisible) return null;
+  if (typeof document === "undefined") return null;
 
   return createPortal(
     <div
-      className={containerClasses}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-16"
       onClick={(e) => {
         if (e.target === e.currentTarget) initiateClose();
       }}
     >
       <div
-        ref={modalRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="pdf-modal-title"
         className={`relative bg-[#1a1a1a] border border-[#333] rounded-xl w-full max-w-4xl max-h-[90vh] shadow-xl overflow-hidden flex flex-col ${
-          animOut ? "animate-elastic-out" : "animate-elastic-in"
+          isAnimatingOut ? "animate-fade-out-down" : "animate-fade-in-up"
         }`}
+        style={{
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden" as const,
+          WebkitOverflowScrolling: "touch" as const,
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-[#333]">
           <button
-            type="button"
-            onClick={openInNewTab}
-            data-focus-initial
-            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg inline-flex items-center gap-2 transition-all focus:outline-none focus:ring-2 focus:ring-red-600"
-            aria-label="Open in new tab"
+            onClick={() => (pdfUrl ? downloadPdf(pdfUrl) : openInNewTab(activeUrl || ""))}
+            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all"
+            aria-label={pdfUrl ? "Download PDF" : "Open in new tab"}
           >
             <FaExternalLinkAlt size={16} />
-            <span className="hidden sm:inline">Open in new tab</span>
+            <span className="hidden sm:inline">{pdfUrl ? "Download" : "Open in new tab"}</span>
           </button>
-          <h2 id="pdf-modal-title" className="sr-only">
-            PDF Preview
-          </h2>
           <button
-            type="button"
             onClick={initiateClose}
-            aria-label="Close preview"
-            className="text-white hover:text-red-500 transition p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-red-600"
+            aria-label="Close Preview"
+            className="text-white hover:text-red-500 transition p-1 rounded-full"
           >
-            <X size={22} />
+            <X size={24} />
           </button>
         </div>
 
-        {/* Body */}
-        <div className="relative flex-1 bg-[#1a1a1a]">
-          {unsupported ? (
-            <div className="flex flex-col items-center justify-center h-full text-white text-sm p-6 text-center space-y-3">
-              <p>Inline PDF preview isn’t supported on this device/browser.</p>
-              <button
-                type="button"
-                onClick={openInNewTab}
-                className="mt-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white px-4 py-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-red-600"
-              >
-                Open PDF in new tab
-              </button>
+        {/* PDF View */}
+        <div className="flex-1 overflow-auto relative bg-[#1a1a1a]">
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-[#1a1a1a] z-10">
+              <Loader2 className="h-8 w-8 animate-spin text-white" />
+            </div>
+          )}
+          {isImagePreview ? (
+            <div className="relative w-full h-[calc(100vh-150px)] max-h-[75vh] min-h-[300px]">
+              <Image
+                src={activeUrl}
+                alt={imageAlt || "Image preview"}
+                fill
+                sizes="100vw"
+                className="object-contain"
+                onLoad={() => setIsLoading(false)}
+              />
             </div>
           ) : (
-            <>
-              {loading && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1a1a1a]">
-                  <Loader2 className="h-8 w-8 animate-spin text-white" />
-                </div>
-              )}
-              <iframe
-                src={pdfUrl}
-                title="PDF preview"
-                className="w-full h-[min(80vh,900px)]"
-                onLoad={() => setLoading(false)}
-                loading="lazy"
-              />
-            </>
+            <iframe
+              src={activeUrl}
+              className="w-full min-h-[600px] h-[calc(100vh-150px)] max-h-[75vh] border-none"
+              onLoad={() => setIsLoading(false)}
+              loading="lazy"
+            />
           )}
         </div>
       </div>

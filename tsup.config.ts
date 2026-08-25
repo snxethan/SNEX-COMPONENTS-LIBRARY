@@ -1,29 +1,12 @@
 import { defineConfig } from 'tsup'
 
-export default defineConfig([
-  // JavaScript/TypeScript build
-  {
-    entry: ['src/index.ts'],
-    format: ['esm', 'cjs'],
-    dts: true,
-    sourcemap: true,
-    clean: true,
-    external: [
-      'react',
-      'react-dom',
-      'react/jsx-runtime',
-      'tailwindcss',
-      'next','next/image','next/link',
-      'postcss',
-      'autoprefixer'
-    ]
-  },
-  // CSS build - rename to index.css for better UX
-  {
-    entry: { index: 'styles.css' },
-    format: ['esm'],
-    dts: false,
-    sourcemap: true,
-    clean: false
-  }
-])
+// CSS is handled by the Tailwind CLI (see the `build` script), which compiles
+// src/styles.css against the components into a self-contained dist/index.css.
+export default defineConfig({
+  entry: ['src/index.ts'],
+  format: ['esm', 'cjs'],
+  dts: true,
+  sourcemap: true,
+  clean: true,
+  external: ['react', 'react-dom', 'react/jsx-runtime'],
+})

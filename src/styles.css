@@ -1,0 +1,245 @@
+/*
+ * Source stylesheet for @snxethan/snex-components.
+ *
+ * The build compiles this against the library's own components (see
+ * tailwind-build.cjs) and emits a self-contained dist/index.css. Consumers do
+ * NOT need Tailwind installed — they just import the built file.
+ *
+ * Preflight is disabled in the build config so importing this never resets the
+ * host application's own styles.
+ */
+
+@tailwind base;
+@tailwind utilities;
+
+/*
+ * Everything below is plain CSS and deliberately sits AFTER the utilities so
+ * it wins on source order, matching how et-portfolio defines these in
+ * globals.css. Keep these keyframes in sync with that file.
+ */
+
+@keyframes snex-fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: snex-fade-in-up 0.4s ease-out forwards;
+}
+
+@keyframes snex-fade-out-down {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+.animate-fade-out-down {
+  animation: snex-fade-out-down 0.3s ease-in forwards;
+}
+
+@keyframes snex-elastic-in {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.6) scaleY(1.4);
+  }
+  50% {
+    transform: scaleX(1.1) scaleY(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-elastic-in {
+  animation: snex-elastic-in 0.4s ease-out forwards;
+}
+
+@keyframes snex-elastic-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    transform: scaleX(1.1) scaleY(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0.6) scaleY(1.4);
+  }
+}
+.animate-elastic-out {
+  animation: snex-elastic-out 0.3s ease-in forwards;
+}
+
+/* Ported verbatim from et-portfolio globals.css - keep in sync. */
+
+@keyframes pin-bounce {
+  0% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-6px);
+  }
+  70% {
+    transform: translateY(0);
+  }
+  85% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes sort-menu-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(-8px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.01) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes sort-menu-out {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.96) translateY(-8px);
+  }
+}
+
+@keyframes tag-extend {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes tag-hide {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-10px);
+  }
+}
+
+.animate-pin-bounce {
+  animation: pin-bounce 0.38s ease-out;
+}
+
+.animate-sort-menu-in {
+  animation: sort-menu-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-sort-menu-out {
+  animation: sort-menu-out 0.22s ease-in forwards;
+}
+
+.animate-tag-extend {
+  animation: tag-extend 0.3s ease-out forwards;
+}
+
+.animate-tag-hide {
+  animation: tag-hide 0.2s ease-in forwards;
+}
+
+.scroll-edge-fade {
+  position: relative;
+  isolation: isolate;
+  --scroll-edge-fade-size: clamp(1.25rem, 3vw, 3rem);
+  /* Padding is applied to BOTH ends. A start-only inset shifted every card
+     right, so the snap-centred card never actually looked centred. */
+  padding-inline: var(--scroll-edge-fade-size);
+  scroll-padding-inline: var(--scroll-edge-fade-size);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--scroll-edge-fade-size),
+    black calc(100% - var(--scroll-edge-fade-size)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--scroll-edge-fade-size),
+    black calc(100% - var(--scroll-edge-fade-size)),
+    transparent
+  );
+}
+
+@supports not ((mask-image: linear-gradient(black, black)) or (-webkit-mask-image: linear-gradient(black, black))) {
+  .scroll-edge-fade {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .scroll-edge-fade::before,
+  .scroll-edge-fade::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: var(--scroll-edge-fade-size);
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .scroll-edge-fade::before {
+    left: 0;
+    background: linear-gradient(to right, #222222 0%, rgba(34, 34, 34, 0) 100%);
+  }
+
+  .scroll-edge-fade::after {
+    right: 0;
+    background: linear-gradient(to left, #222222 0%, rgba(34, 34, 34, 0) 100%);
+  }
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-height: 124px) {
+  .footer-links {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pin-bounce,
+  .animate-tag-extend,
+  .animate-tag-hide,
+  .animate-sort-menu-in,
+  .animate-sort-menu-out {
+    animation: none;
+  }
+}

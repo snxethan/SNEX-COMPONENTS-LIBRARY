@@ -7,9 +7,11 @@ import toast from "react-hot-toast";
 
 interface Props {
   onClose: () => void;
+  /** Endpoint the form POSTs {name, email, message} to. */
+  endpoint?: string;
 }
 
-export default function ContactFormModal({ onClose }: Props) {
+export default function ContactFormModal({ onClose, endpoint = "/api/contact" }: Props) {
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -48,12 +50,12 @@ export default function ContactFormModal({ onClose }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message }),
       });
-      const data = await res.json().catch(() => ({} as any));
+      const data = await res.json().catch(() => ({} as { message?: string }));
       if (res.ok) {
         toast.success("Message sent successfully!");
         onClose();

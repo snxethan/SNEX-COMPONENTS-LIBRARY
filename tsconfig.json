@@ -14,5 +14,5 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
   },
-  "include": ["src", "tailwind-preset.cjs"]
+  "include": ["src"]
 }

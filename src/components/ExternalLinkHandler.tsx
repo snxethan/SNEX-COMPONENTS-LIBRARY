@@ -1,14 +1,13 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
+import {
   createContext,
   useContext,
+  useState,
+  useEffect,
   type ReactNode,
-  useRef,
 } from "react";
-import { X } from "lucide-react";
+import { createPortal } from "react-dom";
 
 interface ExternalLinkContextType {
   showWarning: boolean;
@@ -25,12 +24,15 @@ export const ExternalLinkHandler = ({ children }: { children: ReactNode }) => {
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const [targetUrl, setTargetUrl] = useState("");
   const [isProfessional, setIsProfessional] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const continueBtnRef = useRef<HTMLAnchorElement | null>(null);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const handleExternalClick = (url: string, isProf: boolean = false) => {
+  const handleExternalClick = (url: string, isProfessional: boolean = false) => {
     setTargetUrl(url);
-    setIsProfessional(isProf);
+    setIsProfessional(isProfessional);
     setIsVisible(true);
   };
 
@@ -41,27 +43,19 @@ export const ExternalLinkHandler = ({ children }: { children: ReactNode }) => {
       setIsVisible(false);
       setTargetUrl("");
       setIsProfessional(false);
-    }, 300); // match elastic-out duration
+    }, 300); // match animation duration
   };
 
   useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
     if (isVisible) {
-      document.body.style.overflow = "hidden";
-      // focus the primary action for accessibility
-      setTimeout(() => continueBtnRef.current?.focus(), 0);
-
-      const onKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") closeWarning();
-      };
-      window.addEventListener("keydown", onKey);
-      return () => {
-        window.removeEventListener("keydown", onKey);
-        document.body.style.overflow = prevOverflow;
-      };
+      document.body.classList.add("overflow-hidden");
     } else {
-      document.body.style.overflow = prevOverflow;
+      document.body.classList.remove("overflow-hidden");
     }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
   }, [isVisible]);
 
   return (
@@ -75,81 +69,83 @@ export const ExternalLinkHandler = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-
-      {isVisible && (
-        <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-fade-in"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) closeWarning();
-          }}
-        >
+      {mounted &&
+        isVisible &&
+        createPortal(
           <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="ext-link-title"
-            className={`bg-[#1a1a1a] border border-[#333] rounded-xl w-full max-w-md shadow-xl ${
-              isAnimatingOut ? "animate-elastic-out" : "animate-elastic-in"
-            }`}
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+            onClick={closeWarning}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-[#333]">
-              <h3 id="ext-link-title" className="text-xl font-semibold text-white">
-                External Link Notice
-              </h3>
+            <div
+              className={`bg-[#1a1a1a] border border-[#333] rounded-xl p-6 max-w-md w-full text-center relative ${
+                isAnimatingOut ? "animate-fade-out-down" : "animate-fade-in-up"
+              }`}
+              style={{
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden" as const,
+                WebkitOverflowScrolling: "touch" as const,
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 onClick={closeWarning}
                 aria-label="Close"
-                className="text-gray-400 hover:text-red-500 transition"
+                className="absolute top-1 right-3 text-gray-400 hover:text-red-500 text-4xl"
               >
-                <X size={20} />
+                &times;
               </button>
-            </div>
 
-            {/* Body */}
-            <div className="p-6 text-center">
+              <h3 className="text-xl font-semibold text-white mb-2">External Link Notice</h3>
+
               {isProfessional ? (
                 <>
-                  <p className="text-gray-300 text-sm mb-2">
+                  <p className="text-gray-300 text-sm mb-4">
                     You are about to visit a <b>professional platform</b> or external resource.
                   </p>
                   <p className="text-gray-200 text-sm mb-4">
-                    The content on this platform may not reflect my personal views and is owned by a third party.
+                    The content on this platform may not reflect my personal views and is owned by
+                    a third party.
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="text-gray-300 text-sm mb-2">
+                  <p className="text-gray-300 text-sm mb-4">
                     You are about to visit a <b>social platform</b> or external resource.
                   </p>
                   <p className="text-gray-200 text-sm mb-4">
-                    Please note that the content on this platform does not reflect my professional identity or represent me in any official capacity.
+                    Please note that the content on this platform does not reflect my professional
+                    identity or represent me in any official capacity.
                   </p>
                 </>
               )}
 
-              <p className="text-gray-100 text-sm mb-6">Please proceed with <b>caution</b>.</p>
+              <p className="text-gray-100 text-sm mb-4">
+                Please proceed with <b>caution</b>.
+              </p>
 
-              <a
-                ref={continueBtnRef}
-                href={targetUrl}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                onClick={closeWarning}
-                className="inline-flex items-center justify-center w-full py-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-red-600"
-              >
-                Continue
-              </a>
+              <div className="flex justify-center gap-4">
+                <a
+                  href={targetUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeWarning}
+                  className="flex items-center justify-center gap-2 w-full py-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-lg transition-all"
+                >
+                  Continue
+                </a>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </ExternalLinkContext.Provider>
   );
 };
 
 export const useExternalLink = () => {
-  const ctx = useContext(ExternalLinkContext);
-  if (!ctx) throw new Error("useExternalLink must be used within an ExternalLinkHandler");
-  return ctx;
+  const context = useContext(ExternalLinkContext);
+  if (!context) {
+    throw new Error("useExternalLink must be used within an ExternalLinkHandler");
+  }
+  return context;
 };
