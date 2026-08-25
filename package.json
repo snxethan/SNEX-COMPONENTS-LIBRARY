@@ -50,7 +50,7 @@
   "description": "Shared React components extracted from ethantownsend.dev. Framework-agnostic: no Next.js required.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/snxethan/snex-components.git"
+    "url": "git+https://github.com/snxethan/SNEX-COMPONENTS-LIBRARY.git"
   },
   "license": "MIT"
 }

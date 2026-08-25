@@ -13,11 +13,11 @@ imports `next/*`, so the same build runs in Next.js, Vite, Electron, or CRA.
 No npm registry publish — install straight from git:
 
 ```bash
-npm install github:snxethan/snex-components
+npm install github:snxethan/SNEX-COMPONENTS-LIBRARY
 ```
 
 A `prepare` script builds `dist/` during install, so the repo carries no build
-output. Pin a branch or tag with `github:snxethan/snex-components#v0.3.0`.
+output. Pin a branch or tag with `github:snxethan/SNEX-COMPONENTS-LIBRARY#v0.3.0`.
 
 Peer dependencies: `react` and `react-dom` (18, 19, or 20).
 
